@@ -1,0 +1,13 @@
+{
+  "name": "moore-on-cyber",
+  "version": "1.0.0",
+  "private": true,
+  "description": "mooreoncyber.com — Commercial & Federal Cybersecurity Architecture",
+  "scripts": {
+    "build": "bash build.sh",
+    "dev": "bash build.sh && node dev-server.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  }
+}

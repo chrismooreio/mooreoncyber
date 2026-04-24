@@ -1,0 +1,18 @@
+# Build output
+dist/
+components/*.js
+styles.min.css
+
+# Dependencies
+node_modules/
+
+# macOS
+.DS_Store
+
+# Editor / harness state
+.claude/
+.vscode/
+.idea/
+
+# Logs
+*.log

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#0a0e0f"></rect>
+  <circle cx="50" cy="50" r="8" fill="#c3ff3a"></circle>
+  <text x="50" y="88" font-family="monospace" font-size="14" font-weight="700" fill="#ebe4d8" text-anchor="middle" letter-spacing="2">CM</text>
+</svg>
