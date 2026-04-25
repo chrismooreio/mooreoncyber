@@ -147,6 +147,9 @@ function HomePage({ navigate }) {
             Every engagement starts with a scoping call and ends with a defined deliverable. No open-ended hourly contracts, no scope creep, no surprise invoices.
           </p>
           <Tiers navigate={navigate} />
+          <div style={{ marginTop: 48 }}>
+            <a href="#" className="btn btn-secondary" onClick={(e) => { e.preventDefault(); navigate('services'); }}>View All Services</a>
+          </div>
         </div>
       </section>
     </>
@@ -168,17 +171,17 @@ function Tiers({ navigate }) {
   return (
     <div className="tiers">
       <div className="tier">
-        <div className="tier-name">// Starter</div>
-        <h3 className="tier-title">Cloud Security Assessment</h3>
-        <div className="tier-price">Fixed scope · From $3,500</div>
+        <div className="tier-name">// Targeted</div>
+        <h3 className="tier-title">Targeted Engagement</h3>
+        <div className="tier-price">Fixed scope · From $2,500</div>
         <p className="tier-description">
-          Two-day focused assessment of your commercial or GCCHigh Cloud security environment with a written deliverable identifying gaps, priorities, and a 90-day roadmap.  Licensing mapped commercial-vs-federal — they diverge at every layer.
+          One-off engagements where you need senior cyber expertise applied to a specific problem. Two weeks or less, defined scope, defined deliverable.
         </p>
         <ul className="tier-features">
-          <li>Architecture review</li>
-          <li>CMMC / STIG posture snapshot</li>
-          <li>15-page remediation roadmap</li>
-          <li>60-min findings walkthrough</li>
+          <li>Single-scope project</li>
+          <li>Fixed-fee, fixed-timeline</li>
+          <li>2-week delivery typical</li>
+          <li>Written deliverable + walkthrough</li>
         </ul>
         <a href="#" className="btn btn-secondary" onClick={go}>Inquire</a>
       </div>
@@ -187,27 +190,26 @@ function Tiers({ navigate }) {
         <h3 className="tier-title">Strategic Security Advisory</h3>
         <div className="tier-price">Monthly retainer · From $4,500/mo</div>
         <p className="tier-description">
-          Ongoing strategic advisory for commercial enterprises, federal contractors, and cleared programs. Your on-call senior cyber architect — on a predictable monthly budget.
+          Your on-call senior cyber architect — strategic, not hands-on. Three engagement levels for commercial, federal, and active-deployment cadences.
         </p>
         <ul className="tier-features">
-          <li>10 strategic hours / month</li>
+          <li>10–20 strategic hours / month</li>
           <li>Architecture review access</li>
           <li>Vendor &amp; tooling guidance</li>
-          <li>Quarterly roadmap refresh</li>
           <li>Slack / Teams direct line</li>
         </ul>
         <a href="#" className="btn btn-primary" onClick={go}>Book Intro</a>
       </div>
       <div className="tier">
-        <div className="tier-name">// Delivery</div>
+        <div className="tier-name">// Build</div>
         <h3 className="tier-title">Done-For-You Build</h3>
         <div className="tier-price">Project-based · From $25,000</div>
         <p className="tier-description">
-          End-to-end delivery of a scoped security build. GCCHigh Sentinel quick-start, SOAR architecture, KQL detection packs, or MCP agent workflows — delivered in 2–8 weeks.
+          End-to-end implementation across the Cloud security stack. GCC High Sentinel quick-start, SOAR architecture, KQL detection packs, or MCP agent workflows — delivered in 2–12 weeks.
         </p>
         <ul className="tier-features">
           <li>Fixed-scope, fixed-price</li>
-          <li>2–8 week delivery windows</li>
+          <li>2–12 week delivery windows</li>
           <li>Full documentation</li>
           <li>30-day post-launch support</li>
         </ul>

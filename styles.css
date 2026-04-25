@@ -854,3 +854,177 @@ a.channel-address:hover { color: var(--accent); }
 .post-sig-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--bone-ghost); margin-bottom: 12px; }
 .post-sig-name { font-family: var(--font-display); font-size: 24px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 6px; }
 .post-sig-title { font-family: var(--font-mono); font-size: 12px; color: var(--bone-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* ===== SERVICES — TIER SUB-LEVELS (Advisory) ===== */
+.tier-sublevels {
+  margin: 4px 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 28px;
+  border-bottom: 1px dashed var(--line-2);
+}
+.tier-sublevel {
+  border-left: 2px solid var(--line-2);
+  padding: 14px 16px;
+  background: var(--ink);
+}
+.tier-sublevel-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.tier-sublevel-price {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--bone-dim);
+  margin-bottom: 6px;
+}
+.tier-sublevel-fit {
+  font-size: 13px;
+  color: var(--bone-dim);
+  line-height: 1.5;
+}
+
+/* ===== SERVICES — TIER RECENT EXAMPLES ===== */
+.tier-examples {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--line-2);
+  margin-bottom: 28px;
+}
+.tier-examples-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--bone-ghost);
+  margin-bottom: 10px;
+}
+.tier-examples-list { list-style: none; }
+.tier-examples-list li {
+  font-size: 13px;
+  color: var(--bone-ghost);
+  padding: 4px 0;
+  display: flex;
+  gap: 10px;
+  line-height: 1.4;
+}
+.tier-examples-list li::before {
+  content: "−";
+  color: var(--bone-ghost);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+/* ===== SERVICES — CAPABILITY MATRIX (3-col + tags) ===== */
+.capabilities-grid-3col { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 1024px) { .capabilities-grid-3col { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px)  { .capabilities-grid-3col { grid-template-columns: 1fr; } }
+
+.capability-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 20px;
+}
+.capability-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--bone-ghost);
+  padding: 4px 10px;
+  border: 1px solid var(--line-2);
+}
+
+/* ===== SERVICES — FEATURE CARDS (CMMC + Specialty) ===== */
+.feature-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 768px) { .feature-cards-grid { grid-template-columns: 1fr; } }
+
+.feature-card {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: ""; position: absolute; top: -1px; left: -1px;
+  width: 24px; height: 24px;
+  border-top: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+}
+.feature-card::after {
+  content: ""; position: absolute; bottom: -1px; right: -1px;
+  width: 24px; height: 24px;
+  border-bottom: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+}
+.feature-card-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+.feature-card-tagline {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 20px;
+}
+.feature-card-meta {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  flex-wrap: wrap;
+}
+.feature-card-meta span { color: var(--bone-dim); }
+.feature-card-meta strong { color: var(--accent); font-weight: 500; }
+.feature-card-body {
+  color: var(--bone-dim);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.feature-card-list {
+  list-style: none;
+  margin-bottom: 28px;
+}
+.feature-card-list li {
+  padding: 8px 0;
+  color: var(--bone);
+  font-size: 14px;
+  display: flex;
+  gap: 12px;
+  line-height: 1.4;
+}
+.feature-card-list li::before {
+  content: "+";
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}

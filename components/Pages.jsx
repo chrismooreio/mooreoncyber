@@ -209,44 +209,16 @@ function WritingIndexPage({ navigate }) {
 // ==========================================
 
 function ServicesPage({ navigate }) {
-  const services = [
-    {
-      num: '01',
-      title: 'Commercial & Federal Cybersecurity Consulting',
-      tagline: 'Direct to enterprises, primes, end clients, and sub-contract vehicles.',
-      body: "Architecture review, security program uplift, CMMC readiness, and Cloud-native commercial and GCCHigh engagements. Licensing, endpoints, and feature parity mapped across both sides — most templates copied from commercial to federal silently fail. Works at the speed of a cleared operator who's shipped this work before, not at the speed of a generic consulting firm learning on your dime.",
-      tags: ['Commercial', 'GCCHigh', 'CMMC L2', 'Licensing', 'Architecture Review'],
-    },
-    {
-      num: '02',
-      title: 'Curriculum & Training Authorship',
-      tagline: 'Course development for Cloud Sentinel, Defender XDR, Purview.',
-      body: 'Training material written by someone who ships in production. For consulting firms building internal capability, for certification platforms needing technical accuracy, for federal programs standing up new cyber curricula. Every lesson is tested against a real environment before it reaches a student.',
-      tags: ['Sentinel', 'Defender XDR', 'Purview', 'Course Design'],
-    },
-    {
-      num: '03',
-      title: 'Assessment Framework Development',
-      tagline: 'Methodologies, maturity models, repeatable evaluation frameworks.',
-      body: "For consulting firms and federal contractors who need to productize their security services. I'll design the rubric, author the controls, build the scoring model, and document the delivery playbook so your team can run it consistently across engagements.",
-      tags: ['Methodology', 'Maturity Models', 'Productization'],
-    },
-    {
-      num: '04',
-      title: 'KQL Detection Engineering',
-      tagline: 'Custom Sentinel analytics, ASIM normalization, multi-tenant MDR.',
-      body: 'Detection content tuned for federal and defense workloads. Custom Sentinel analytic rules that actually match your threat model, ASIM normalization for cross-source correlation, and multi-tenant architecture for MSSPs and primes running Sentinel MDR at scale.',
-      tags: ['KQL', 'ASIM', 'Multi-Tenant', 'Detection Engineering'],
-    },
-    {
-      num: '05',
-      title: 'Expert Witness',
-      aside: '/ Independent',
-      tagline: 'Cybersecurity expert witness engagements for litigation support.',
-      body: 'Handled through a separate professional structure. Case inquiries routed through established expert directories and direct attorney relationships. Federal Cloud security, incident response, and cloud architecture disputes — areas where actual practice matters more than theoretical opinion.',
-      tags: ['Litigation', 'Cyber Forensics', 'Deposition & Trial'],
-    },
-  ];
+  const goContact = (e, anchor) => {
+    e.preventDefault();
+    navigate('contact');
+    if (anchor) {
+      setTimeout(() => {
+        const el = document.getElementById(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
 
   return (
     <>
@@ -254,54 +226,226 @@ function ServicesPage({ navigate }) {
         <div className="container">
           <div className="section-label">// Services</div>
           <h1 className="page-title display">
-            Five pillars.<br />
-            <em>One operator.</em><br />
-            No pass-offs.
+            Three ways <em>in.</em><br />
+            Full coverage <em>across.</em>
           </h1>
           <p className="page-intro">
-            Everything I deliver is hands-on work from a practicing cyber architect — not a salesperson, not a junior associate, not a white-labeled subcontractor. Commercial enterprises, federal primes, cleared programs. If I'm on the contract, I'm building the thing.
+            The Cloud security stack is broad. Most clients don't need everything at once — they need the right engagement model for the problem they actually have. Three tiers based on how you want to work together, with full capability coverage underneath. No retainer traps, no scope creep, no surprise invoices.
           </p>
         </div>
       </section>
 
-      <AsciiDivider>▸ ▸ ▸ &nbsp; WHAT I DELIVER &nbsp; ◂ ◂ ◂</AsciiDivider>
+      <AsciiDivider>▸ ▸ ▸ &nbsp; ENGAGEMENT MODELS &nbsp; ◂ ◂ ◂</AsciiDivider>
 
       <section className="section">
         <div className="container">
-          <div className="section-label">01 / Core Services</div>
-          <div className="services-detail">
-            {services.map((s) => (
-              <div className="service-detail-row" key={s.num}>
-                <div className="service-detail-number">{s.num}</div>
-                <div className="service-detail-content">
-                  <h3>
-                    {s.title}
-                    {s.aside && <span className="service-detail-aside"> {s.aside}</span>}
-                  </h3>
-                  <p className="service-detail-tagline">{s.tagline}</p>
-                  <p className="service-detail-body">{s.body}</p>
-                  <div className="service-detail-tags">
-                    {s.tags.map((t) => (
-                      <span key={t} className="service-tag">{t}</span>
-                    ))}
-                  </div>
+          <div className="section-label">01 / Engagement Models</div>
+          <div className="tiers">
+
+            <div className="tier">
+              <div className="tier-name">// Targeted</div>
+              <h3 className="tier-title">Targeted Engagement</h3>
+              <div className="tier-price">Fixed scope · From $2,500</div>
+              <p className="tier-description">
+                One-off engagements where you need senior cyber expertise applied to a specific problem. Two weeks or less, defined scope, defined deliverable.
+              </p>
+              <ul className="tier-features">
+                <li>Single-scope project</li>
+                <li>Fixed-fee, fixed-timeline</li>
+                <li>2-week delivery typical</li>
+                <li>Written deliverable + walkthrough</li>
+              </ul>
+              <div className="tier-examples">
+                <div className="tier-examples-label">// Recent examples</div>
+                <ul className="tier-examples-list">
+                  <li>Conditional Access policy review</li>
+                  <li>KQL detection authoring</li>
+                  <li>Defender XDR alert tuning</li>
+                  <li>Curriculum or training authorship</li>
+                  <li>Architecture pre-deployment review</li>
+                </ul>
+              </div>
+              <a href="#" className="btn btn-secondary" onClick={(e) => goContact(e)}>Inquire</a>
+            </div>
+
+            <div className="tier tier-featured">
+              <div className="tier-name">// Advisory</div>
+              <h3 className="tier-title">Strategic Security Advisory</h3>
+              <div className="tier-price">Monthly retainer · Three levels</div>
+              <p className="tier-description">
+                Your on-call senior cyber architect — strategic, not hands-on. Three levels based on your environment and cadence.
+              </p>
+              <div className="tier-sublevels">
+                <div className="tier-sublevel">
+                  <div className="tier-sublevel-name">Commercial</div>
+                  <div className="tier-sublevel-price">From $4,500/mo · 10 hours</div>
+                  <p className="tier-sublevel-fit">Mid-market commercial enterprises</p>
+                </div>
+                <div className="tier-sublevel">
+                  <div className="tier-sublevel-name">Federal</div>
+                  <div className="tier-sublevel-price">From $7,500/mo · 12 hours</div>
+                  <p className="tier-sublevel-fit">Federal contractors, GCC High tenants, CMMC-bound</p>
+                </div>
+                <div className="tier-sublevel">
+                  <div className="tier-sublevel-name">Federal Premium</div>
+                  <div className="tier-sublevel-price">From $12,000/mo · 20 hours</div>
+                  <p className="tier-sublevel-fit">Active deployment phases, audit prep, weekly cadence</p>
                 </div>
               </div>
-            ))}
+              <a href="#" className="btn btn-primary" onClick={(e) => goContact(e)}>Book Intro</a>
+            </div>
+
+            <div className="tier">
+              <div className="tier-name">// Build</div>
+              <h3 className="tier-title">Done-For-You Build</h3>
+              <div className="tier-price">Project-based · From $25,000</div>
+              <p className="tier-description">
+                End-to-end implementation across the Cloud security stack. Fixed scope, fixed price, 2–12 week delivery.
+              </p>
+              <ul className="tier-features">
+                <li>Fixed-scope, fixed-price</li>
+                <li>2–12 week delivery windows</li>
+                <li>Full documentation</li>
+                <li>30-day post-launch support</li>
+              </ul>
+              <div className="tier-examples">
+                <div className="tier-examples-label">// Recent examples</div>
+                <ul className="tier-examples-list">
+                  <li>GCC High Sentinel deployment</li>
+                  <li>Three-tier Logic App SOAR</li>
+                  <li>Multi-tenant MDR architecture</li>
+                  <li>Purview DLP program standup</li>
+                  <li>Defender for Cloud baseline</li>
+                </ul>
+              </div>
+              <a href="#" className="btn btn-secondary" onClick={(e) => goContact(e)}>Scope a Build</a>
+            </div>
+
           </div>
         </div>
       </section>
 
+      <AsciiDivider>░░░ CLOUD SECURITY STACK ░░░</AsciiDivider>
+
       <section className="section">
         <div className="container">
-          <div className="section-label">02 / Engagement Models</div>
+          <div className="section-label">02 / Capability Matrix</div>
           <h2 className="section-title display">
-            Three ways in. <em>No retainer traps.</em>
+            Full coverage. <em>One operator.</em>
           </h2>
           <p className="section-intro">
-            Every engagement starts with a scoping call and ends with a defined deliverable. No open-ended hourly contracts, no scope creep, no surprise invoices.
+            What I deliver across the stack. If a capability you need isn't here, ask — chances are it's adjacent to something I've shipped.
           </p>
-          <Tiers navigate={navigate} />
+          <div className="capabilities-grid capabilities-grid-3col">
+            <Capability code="SEN" title="Sentinel" body="SIEM deployment, content engineering, KQL detection authoring, ASIM normalization, multi-tenant MSSP architecture, Sentinel Data Lake integration, log routing strategy across commercial and GCC High tenants." tags={['KQL','ASIM','Multi-Tenant','Data Lake']} />
+            <Capability code="XDR" title="Defender XDR" body="Defender for Endpoint, Office 365, Identity, and Cloud Apps. Threat hunting, incident response tuning, alert prioritization, custom detection rules, attack disruption configuration, and integration with Sentinel for unified investigation." tags={['MDE','MDO','MDI','MDA']} />
+            <Capability code="DFC" title="Defender for Cloud" body="Azure security posture management, regulatory compliance dashboards, cloud workload protection, multi-cloud connectors, JIT VM access, defender plans tuning, and Arc-managed server posture across hybrid environments." tags={['CSPM','CWPP','Arc','Multi-Cloud']} />
+            <Capability code="PUR" title="Purview" body="Data Loss Prevention, information protection labeling, insider risk management, communication compliance, eDiscovery, Compliance Manager, and Data Security Posture Management (DSPM) for AI." tags={['DLP','Sensitivity Labels','DSPM','eDiscovery']} />
+            <Capability code="MEM" title="Intune & Endpoint" body="Mobile device management, app protection policies, Autopilot deployment, hybrid Azure AD join, device compliance baselines, security baselines, and BYOD strategy for federal and commercial environments." tags={['MDM','MAM','Autopilot','Compliance']} />
+            <Capability code="IAM" title="Entra (Azure AD)" body="Conditional Access design, identity governance, Privileged Identity Management, B2B and B2C identity, Verified ID, identity protection policies, and zero-trust identity architecture." tags={['Conditional Access','PIM','ZTA','Verified ID']} />
+            <Capability code="SOAR" title="Logic Apps SOAR" body="Three-tier orchestrator-decision-execution architecture. Threat intelligence enrichment via DomainTools, BloxOne, FortiAnalyzer, and Defender ATP. Automated response playbooks with human-in-the-loop approval gates." tags={['Logic Apps','Playbooks','Enrichment','HITL']} />
+            <Capability code="GOV" title="Azure Policy & Governance" body="STIG automation via PowerSTIG and Azure Machine Configuration. CMMC control mapping, custom policy authoring, exemption patterns, and audit-grade evidence collection through custom Sentinel tables." tags={['STIG','CMMC','Policy','Evidence']} />
+            <Capability code="AGT" title="Agentic Cyber & MCP" body="Custom Model Context Protocol server development, agentic SOC workflows, AI-native detection engineering, Claude and OpenAI API integration, and MCP-based investigation orchestration." tags={['MCP','Claude API','Agentic SOC','AI Detection']} />
+          </div>
+        </div>
+      </section>
+
+      <AsciiDivider>▸ ▸ ▸ &nbsp; PRODUCTIZED OFFERINGS &nbsp; ◂ ◂ ◂</AsciiDivider>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-label">03 / Productized Offerings</div>
+          <h2 className="section-title display">
+            <em>CMMC Level 2.</em><br />
+            Two productized paths.
+          </h2>
+          <div className="feature-cards-grid">
+            <div className="feature-card">
+              <div className="feature-card-label">// Assessment</div>
+              <h3>CMMC Gap Assessment</h3>
+              <div className="feature-card-meta">
+                <span><strong>From $7,500</strong> fixed fee</span>
+                <span>2-week delivery</span>
+              </div>
+              <p className="feature-card-body">
+                Focused gap assessment of your environment against CMMC Level 2 controls. Written deliverable identifies gaps, prioritized findings, and a defined roadmap to readiness.
+              </p>
+              <ul className="feature-card-list">
+                <li>Control-by-control gap analysis</li>
+                <li>Prioritized findings report</li>
+                <li>90-day remediation roadmap</li>
+                <li>60-min walkthrough with stakeholders</li>
+              </ul>
+              <a href="#" className="btn btn-secondary" onClick={(e) => goContact(e)}>Inquire</a>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-card-label">// Build</div>
+              <h3>CMMC L2 Readiness Build</h3>
+              <div className="feature-card-meta">
+                <span><strong>From $35,000</strong> project-based</span>
+                <span>8–12 weeks</span>
+              </div>
+              <p className="feature-card-body">
+                End-to-end CMMC L2 readiness program. Policy development, technical control implementation, evidence package preparation, and pre-assessment dry run.
+              </p>
+              <ul className="feature-card-list">
+                <li>Policy framework development</li>
+                <li>Technical control implementation</li>
+                <li>Evidence package preparation</li>
+                <li>Pre-assessment dry run</li>
+                <li>C3PAO assessment support</li>
+              </ul>
+              <a href="#" className="btn btn-secondary" onClick={(e) => goContact(e)}>Scope a Build</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <AsciiDivider>░░░ SPECIALTY TRACKS ░░░</AsciiDivider>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-label">04 / Specialty Tracks</div>
+          <h2 className="section-title display">
+            <em>Independent professional</em> structures.
+          </h2>
+          <p className="section-intro">
+            Two specialty tracks that operate outside the standard consulting tiers. Different engagement letters, different liability profiles, different ethics rules. Routed separately.
+          </p>
+          <div className="feature-cards-grid">
+            <div className="feature-card">
+              <div className="feature-card-label">// Independent</div>
+              <h3>Expert Witness</h3>
+              <p className="feature-card-tagline">Litigation support routed through expert directories</p>
+              <p className="feature-card-body">
+                Federal Cloud security, incident response disputes, cloud architecture matters, breach causation analysis. Cases routed through Round Table Group, IMS Legal, Expert Institute, and direct attorney relationships. Separate engagement letter and retainer structure.
+              </p>
+              <ul className="feature-card-list">
+                <li>Initial case review and report writing</li>
+                <li>Deposition testimony</li>
+                <li>Trial testimony</li>
+                <li>Federal Rule 26 disclosure compliance</li>
+              </ul>
+              <a href="#" className="btn btn-secondary" onClick={(e) => goContact(e, 'expert-witness')}>Case inquiry</a>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-card-label">// Surge</div>
+              <h3>Incident Response</h3>
+              <p className="feature-card-tagline">Active breach response and post-incident analysis</p>
+              <p className="feature-card-body">
+                Active breach response, ransomware containment, post-incident forensics, and breach root-cause analysis. On-call retainer or surge engagement available. Surge rates apply during active incidents — different from standard consulting.
+              </p>
+              <ul className="feature-card-list">
+                <li>On-call retainer (monthly availability)</li>
+                <li>Active incident surge support</li>
+                <li>Post-incident root-cause analysis</li>
+                <li>Breach communications support</li>
+              </ul>
+              <a href="#" className="btn btn-secondary" onClick={(e) => goContact(e, 'incident-response')}>Discuss IR coverage</a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -395,12 +539,17 @@ function AgenticCyberPage({ navigate }) {
   );
 }
 
-function Capability({ code, title, body }) {
+function Capability({ code, title, body, tags }) {
   return (
     <div className="capability">
       <div className="capability-icon">{code}</div>
       <h3>{title}</h3>
       <p>{body}</p>
+      {tags && tags.length > 0 && (
+        <div className="capability-tags">
+          {tags.map((t) => <span key={t} className="capability-tag">{t}</span>)}
+        </div>
+      )}
     </div>
   );
 }
@@ -467,7 +616,7 @@ function ContactPage({ navigate }) {
               </p>
               <div className="intake-cta">Scope a build →</div>
             </a>
-            <a href="mailto:chris@mooreoncyber.com" className="intake-card">
+            <a href="mailto:chris@mooreoncyber.com" id="expert-witness" className="intake-card">
               <div className="intake-card-label">// Independent</div>
               <h3>Expert Witness Inquiry</h3>
               <p className="intake-tagline">Separate professional structure</p>
@@ -475,6 +624,15 @@ function ContactPage({ navigate }) {
                 For attorneys and litigation support teams. Federal Cloud security, incident response disputes, cloud architecture matters. Cases routed through established expert directories or direct counsel relationships.
               </p>
               <div className="intake-cta">Case inquiry →</div>
+            </a>
+            <a href="mailto:chris@mooreoncyber.com" id="incident-response" className="intake-card">
+              <div className="intake-card-label">// Surge</div>
+              <h3>Incident Response</h3>
+              <p className="intake-tagline">Active breach &amp; surge engagements</p>
+              <p className="intake-body">
+                Active breach response, ransomware containment, post-incident forensics, and root-cause analysis. On-call retainer or surge engagement available. Surge rates apply during active incidents.
+              </p>
+              <div className="intake-cta">Discuss IR coverage →</div>
             </a>
           </div>
         </div>
