@@ -122,6 +122,16 @@ const POSTS = [
     live: true,
   },
   {
+    slug: 'powerstig-mof-compilation',
+    title: "PowerSTIG MOF Compilation in GCC High: Five Failures Hidden Behind 'Node Is Null'",
+    description: "Why DSC error messages in PowerSTIG don't tell you what's actually broken — and the five distinct root causes hiding behind the same misleading error.",
+    publishDate: 'Apr 4, 2026',
+    publishDateLong: 'April 4, 2026',
+    tags: ['STIG', 'PowerSTIG', 'DSC', 'GCC High', 'Federal'],
+    readTime: '8 min',
+    live: true,
+  },
+  {
     slug: 'unused-microsoft-licenses',
     title: "Why 80% of Federal Cloud Security Licenses Are Unused",
     description: "The core thesis behind the practice — the extraction vs accumulation problem. Why the spend is already booked and the value still isn't showing up.",
@@ -178,7 +188,7 @@ function WritingIndexPage({ navigate }) {
                 className={`post-row ${post.live ? '' : 'post-row-ghost'}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  if (post.live) navigate('post');
+                  if (post.live) navigate('post', post.slug);
                 }}
               >
                 <div className="post-row-date">{post.publishDate}</div>
@@ -525,7 +535,7 @@ function AgenticCyberPage({ navigate }) {
           <h2 className="section-title display">
             Field reports on <em>the agentic stack.</em>
           </h2>
-          <a href="#" className="reading-card" onClick={(e) => { e.preventDefault(); navigate('post'); }}>
+          <a href="#" className="reading-card" onClick={(e) => { e.preventDefault(); navigate('post', 'agentic-soc-mcp-data-lake'); }}>
             <div className="reading-card-meta">
               <span className="reading-card-tag">Agentic · MCP · Data Lake</span>
               <span className="reading-card-date">Apr 22, 2026</span>

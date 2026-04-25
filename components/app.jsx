@@ -14,13 +14,18 @@ const ACCENTS = {
 
 function App() {
   const [page, setPage] = useState(() => localStorage.getItem('moc-page') || 'home');
+  const [postSlug, setPostSlug] = useState(() => localStorage.getItem('moc-post-slug') || 'agentic-soc-mcp-data-lake');
   const [tweaksOpen, setTweaksOpen] = useState(false);
   const [accent, setAccent] = useState(TWEAK_DEFAULTS.accentColor);
   const [scanLines, setScanLines] = useState(TWEAK_DEFAULTS.scanLines);
 
-  const navigate = (p) => {
+  const navigate = (p, slug) => {
     setPage(p);
     localStorage.setItem('moc-page', p);
+    if (slug !== undefined) {
+      setPostSlug(slug);
+      localStorage.setItem('moc-post-slug', slug);
+    }
     requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'auto' }));
   };
 
@@ -71,8 +76,8 @@ function App() {
   return (
     <>
       <Nav currentPath={page} navigate={navigate} />
-      <main key={page} data-screen-label={`${page}`}>
-        <PageComponent navigate={navigate} />
+      <main key={page === 'post' ? `post-${postSlug}` : page} data-screen-label={`${page}`}>
+        <PageComponent navigate={navigate} postSlug={postSlug} />
       </main>
       <Footer navigate={navigate} />
 

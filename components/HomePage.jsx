@@ -93,7 +93,7 @@ function HomePage({ navigate }) {
           </p>
 
           <div className="writing-list">
-            <a href="#" className="writing-card" onClick={(e) => { e.preventDefault(); navigate('post'); }}>
+            <a href="#" className="writing-card" onClick={(e) => { e.preventDefault(); navigate('post', 'agentic-soc-mcp-data-lake'); }}>
               <div className="writing-meta">
                 <span className="writing-tag">Agentic</span>
                 <span className="writing-date">Apr 22, 2026</span>
