@@ -325,7 +325,7 @@ function ServicesPage({ navigate }) {
         </div>
       </section>
 
-      <AsciiDivider>░░░ MICROSOFT SECURITY STACK ░░░</AsciiDivider>
+      <AsciiDivider>░░░ THE STACK ░░░</AsciiDivider>
 
       <section className="section">
         <div className="container">
@@ -337,6 +337,7 @@ function ServicesPage({ navigate }) {
             What I deliver across the stack. If a capability you need isn't here, ask — chances are it's adjacent to something I've shipped.
           </p>
           <div className="capabilities-grid capabilities-grid-3col">
+            <Capability code="AGT" title="Agentic Cyber & MCP" body="Custom Model Context Protocol server development, agentic SOC workflows, AI-native detection engineering, Claude and OpenAI API integration, and MCP-based investigation orchestration." tags={['MCP','Claude API','Agentic SOC','AI Detection']} />
             <Capability code="SEN" title="Microsoft Sentinel" body="SIEM deployment, content engineering, KQL detection authoring, ASIM normalization, multi-tenant MSSP architecture, Sentinel Data Lake integration, log routing strategy across commercial and GCC High tenants." tags={['KQL','ASIM','Multi-Tenant','Data Lake']} />
             <Capability code="XDR" title="Microsoft Defender XDR" body="Defender for Endpoint, Office 365, Identity, and Cloud Apps. Threat hunting, incident response tuning, alert prioritization, custom detection rules, attack disruption configuration, and integration with Sentinel for unified investigation." tags={['MDE','MDO','MDI','MDA']} />
             <Capability code="DFC" title="Microsoft Defender for Cloud" body="Azure security posture management, regulatory compliance dashboards, cloud workload protection, multi-cloud connectors, JIT VM access, defender plans tuning, and Arc-managed server posture across hybrid environments." tags={['CSPM','CWPP','Arc','Multi-Cloud']} />
@@ -345,7 +346,9 @@ function ServicesPage({ navigate }) {
             <Capability code="IAM" title="Microsoft Entra ID" body="Conditional Access design, identity governance, Privileged Identity Management, B2B and B2C identity, Verified ID, identity protection policies, and zero-trust identity architecture." tags={['Conditional Access','PIM','ZTA','Verified ID']} />
             <Capability code="SOAR" title="Azure Logic Apps SOAR" body="Three-tier orchestrator-decision-execution architecture. Threat intelligence enrichment via DomainTools, BloxOne, FortiAnalyzer, and Defender ATP. Automated response playbooks with human-in-the-loop approval gates." tags={['Logic Apps','Playbooks','Enrichment','HITL']} />
             <Capability code="GOV" title="Azure Policy & Governance" body="STIG automation via PowerSTIG and Azure Machine Configuration. CMMC control mapping, custom policy authoring, exemption patterns, and audit-grade evidence collection through custom Sentinel tables." tags={['STIG','CMMC','Policy','Evidence']} />
-            <Capability code="AGT" title="Agentic Cyber & MCP" body="Custom Model Context Protocol server development, agentic SOC workflows, AI-native detection engineering, Claude and OpenAI API integration, and MCP-based investigation orchestration." tags={['MCP','Claude API','Agentic SOC','AI Detection']} />
+            <Capability code="GMN" title="Gemini in Security Operations" body="Google's AI-assisted SOC stack across Chronicle SIEM and SOAR. Natural-language alert pivots, detection authoring assistance, case summarization, and Mandiant threat intelligence queries through Gemini. Where the SIEM stops being a query-language problem and starts being a conversation." tags={['Chronicle','Gemini','Mandiant TI','AI Triage']} />
+            <Capability code="MAR" title="Google Model Armor" body="Prompt and response security for GenAI applications. Jailbreak detection, sensitive-data leak prevention, response filtering, and policy enforcement at the LLM API boundary. The defensive perimeter between agents and what they're allowed to say or do." tags={['Prompt Filtering','PII Redaction','Jailbreak Defense','LLM Gateway']} />
+            <Capability code="VTX" title="Vertex AI Agent Security" body="Security controls for Google's agentic AI platform. Sensitive Data Protection in Vertex AI, agent guardrails, model registry policy, and training-data classification. The DSPM-for-AI surface on the Google side, parallel to Microsoft Purview's coverage." tags={['Vertex AI','DSPM for AI','Agent Guardrails','Model Policy']} />
           </div>
         </div>
       </section>
