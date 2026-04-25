@@ -79,82 +79,21 @@ const POSTS_CONTENT = {
 
   'powerstig-mof-compilation': () => (
     <>
-      <p>DSC's error messages aren't lying on purpose. They're just <em>chronologically confused</em>. The error you see during PowerSTIG MOF compilation is whatever broke last during configuration parsing. The actual root cause already happened — three module loads earlier, in a code path that never reported.</p>
-      <p>I burned a couple of days on this last week. Windows Server 2022 STIG MOF compilation in Azure Government, hardened image, restricted execution policies. Five distinct things broke during the session. None of them produced an error message that named the actual problem. Every one of them surfaced as <code>PSDesiredStateConfiguration\Node : The argument is null or empty</code>.</p>
-      <p>If you're shipping STIG automation in GCC High and you've hit that error, this is what's actually broken.</p>
+      <p>DISA STIG compliance for Windows Server in Azure Government has historically been a manual project. Hundreds of controls, V-numbers, rationale write-ups, screenshots. Multiple weeks per server. The auditor leaves, the program team breathes out, the next assessment is six months away — and someone has to do it all again.</p>
+      <p>It doesn't have to be that way.</p>
+      <p>The right PowerSTIG pipeline turns the entire workflow into something repeatable: a single <code>Configuration</code> block compiles into a complete compliance baseline (MOF), audit-mode testing verifies the live server against every STIG rule without making changes, and the results map back to V-numbers in the format DISA auditors actually want. Three stages, every output the assessment process needs.</p>
+      <p>This is the pipeline I ship in GCC High. Here's what it produces.</p>
 
-      <h2>MOF compilation, briefly</h2>
-      <p>For readers landing here cold: PowerSTIG is the DISA STIG automation library. It compiles a Managed Object Format (MOF) file from a <code>Configuration</code> block, and you apply that MOF to a target server using DSC. The MOF is the compiled compliance baseline — every Windows Server 2022 STIG rule, every V-number, every desired state, in a single artifact.</p>
-      <p>Compilation should be a one-liner. In commercial Azure on a clean lab VM, it usually is. In GCC High you're running on hardened images, restricted execution policies, and modules pulled from a closed gallery — the moment any one of those gets out of alignment, DSC parsing collapses, and the error tells you nothing useful.</p>
-      <p>Every failure mode below was originally surfaced as the same <code>Node : The argument is null or empty</code> message. Each one is a different thing actually breaking.</p>
+      <h2>The pipeline, end to end</h2>
+      <p>Three stages move from a 30-line PowerShell script to an auditor-ready CKL file.</p>
+      <p><strong>Stage 1: Compile.</strong> A <code>Configuration</code> block calls the <code>WindowsServer</code> composite resource in PowerSTIG. Output: a 306 KB MOF file that defines the desired state for every Windows Server 2022 STIG rule at v2.7. This is the compiled compliance baseline.</p>
+      <p><strong>Stage 2: Verify.</strong> <code>Test-DscConfiguration</code> runs the MOF against the live server in audit mode. No changes. Output: per-rule compliance state — what passed, what failed, what's not measurable. Takes 10–20 minutes for a full STIG.</p>
+      <p><strong>Stage 3: Report.</strong> PowerSTIG's reporting functions enrich the audit results with V-numbers, severities, and rule titles, then export to CSV and CKL. Output: an auditor-ready evidence package.</p>
+      <p>The same pipeline runs against domain controllers (swap one parameter), Windows Server 2019, Windows Server 2025 when the STIG ships, and adjacent OS roles. The compilation infrastructure is the long-lived asset. Everything else is configuration.</p>
 
-      <h2>The same error, five different roots</h2>
-
-      <h3>1. The PowerShell ISE scoping bug</h3>
-      <p>If you're running your <code>Configuration</code> block from the script pane of PowerShell ISE — stop. ISE has a long-standing scoping bug with the <code>Node</code> keyword inside a DSC <code>Configuration</code>. The <code>Node</code> parameter sometimes loses its argument during parsing, and DSC reports it as null. The same configuration runs cleanly in a regular Administrator PowerShell console.</p>
-      <p><strong>Fix.</strong> Save the <code>Configuration</code> as a <code>.ps1</code> file and run it from a regular Administrator console with <code>{`& C:\\Temp\\StigAudit.ps1`}</code>. Don't paste multi-line <code>Configuration</code> blocks into the console either — long lines get truncated and the parser sees gibberish.</p>
-      <p><strong>Lesson.</strong> ISE is fine for prototyping cmdlets. It's not fine for DSC. Use a regular console for any work that touches <code>Configuration</code>, <code>Node</code>, or <code>Import-DscResource</code>.</p>
-
-      <h3>2. The duplicate-install trap</h3>
-      <p>If you ever installed PowerSTIG with <code>-Scope CurrentUser</code> to test, then re-installed with <code>-Scope AllUsers</code> to ship, you have two copies of the module in two paths. DSC cannot resolve which one to load during <code>Import-DscResource</code>. The <code>Configuration</code> parses partially, then fails — and the error surfaces as a <code>Node</code> problem, not a module-resolution problem.</p>
-      <p><strong>Fix.</strong></p>
-      <pre><code>{`Remove-Item -Path "$env:USERPROFILE\\Documents\\WindowsPowerShell\\Modules\\PowerSTIG" -Recurse -Force
-(Get-Module PowerSTIG -ListAvailable).Count    # Should return 1`}</code></pre>
-      <p><strong>Lesson.</strong> Never install DSC modules in both <code>-Scope CurrentUser</code> and <code>-Scope AllUsers</code>. The resolution is silently wrong. For DSC, always use <code>-Scope AllUsers</code> — the <code>{`Program Files\\WindowsPowerShell\\Modules`}</code> path is where DSC compilation looks by default.</p>
-
-      <h3>3. <code>{'OrgSettings = $null'}</code> is not accepted</h3>
-      <p>The <code>WindowsServer</code> composite resource in PowerSTIG requires an actual file path for <code>OrgSettings</code>. The XML files ship with the module in <code>{`StigData\\Processed`}</code>, but the resource validates strictly — <code>$null</code> fails. The actual error references the parameter, but what you see is still the misleading <code>Node</code> complaint, because DSC parsing fails before parameter validation completes its report.</p>
-      <p><strong>Fix.</strong> Point <code>OrgSettings</code> to the real default file. For Windows Server 2022 v2.7, that's:</p>
-      <pre><code>{`C:\\Program Files\\WindowsPowerShell\\Modules\\PowerSTIG\\4.29.0\\StigData\\Processed\\WindowsServer-2022-MS-2.7.org.default.xml`}</code></pre>
-      <p>For domain controllers, swap <code>MS</code> for <code>DC</code> in the filename.</p>
-      <p><strong>Lesson.</strong> <code>OrgSettings</code> always requires a file path. If you don't have org-specific overrides, point at the default. Find the right one with:</p>
-      <pre><code>{`Get-ChildItem "$stigPath\\StigData\\Processed" -Filter "*WindowsServer*2022*org*"`}</code></pre>
-
-      <h3>4. The missing <code>OsRole</code> parameter</h3>
-      <p>The <code>OrgSettings</code> files are split by server role. There's an <code>MS</code> (Member Server) variant and a <code>DC</code> (Domain Controller) variant. PowerSTIG cannot infer which schema to validate against from the file path alone — you have to tell it explicitly with <code>OsRole</code>.</p>
-      <p><strong>Fix.</strong> Add <code>{"OsRole = 'MS'"}</code> for member servers, <code>{"OsRole = 'DC'"}</code> for domain controllers. The <code>OrgSettings</code> filename, the <code>OsRole</code> value, and the server's actual role all have to align — mismatching any of them produces the same misleading null-argument error.</p>
-      <p><strong>Lesson.</strong> <code>OsRole</code> is required, not optional. Two valid values: <code>MS</code> and <code>DC</code>. There is no third option, no auto-detect, no default.</p>
-
-      <h3>5. The empty <code>Exception</code> hashtable</h3>
-      <p>This is the one I lost the most time to. Adding <code>{'Exception = @{}'}</code> to your <code>Configuration</code> — meaning, "I have no exceptions to define yet, but I want the parameter present" — fails parameter validation downstream. The error references <code>OrgSettings</code>, not <code>Exception</code>, because the validation chain confuses itself.</p>
-      <p><strong>Fix.</strong> Don't pass empty collections. Omit the parameter entirely. Only include <code>Exception</code> when you have actual V-number exceptions to define:</p>
-      <pre><code>{`Exception = @{ 'V-12345' = @{ ValueData = '1' } }`}</code></pre>
-      <p><strong>Lesson.</strong> PowerSTIG parameter validation is order-dependent and not particularly forgiving. If you have no value for an optional parameter, omit it. Do not pass empty hashtables, do not pass empty arrays, do not pass <code>$null</code>.</p>
-
-      <h2>Exposing the real error</h2>
-      <p>DSC hides real errors behind whatever happened last. The trick to getting the actual root cause is to clear <code>$Error</code> before compilation, run the configuration, then dump the entire <code>$Error</code> collection after:</p>
-      <pre><code>{`$Error.Clear()
-
-try {
-    Import-Module PowerSTIG -Force
-
-    Configuration StigAudit
-    {
-        Import-DscResource -ModuleName PowerSTIG
-        Node 'localhost'
-        {
-            WindowsServer STIG_Baseline
-            {
-                OsVersion   = '2022'
-                StigVersion = '2.7'
-                OsRole      = 'MS'
-                OrgSettings = '<path>'
-            }
-        }
-    }
-
-    StigAudit -OutputPath C:\\Temp\\AuditMOF
-}
-catch {
-    Write-Host "CAUGHT: $_" -ForegroundColor Red
-}
-
-Write-Host "\`nALL ERRORS:" -ForegroundColor Yellow
-$Error | ForEach-Object { Write-Host $_.Exception.Message -ForegroundColor Magenta }`}</code></pre>
-      <p>The <code>ALL ERRORS</code> section reveals the validation failures DSC swallows during parsing. Both the <code>{'OrgSettings = $null'}</code> and <code>{'Exception = @{}'}</code> issues only became visible to me through this technique. Without it, I would have spent another day chasing the <code>Node</code> keyword.</p>
-
-      <h2>The working configuration</h2>
-      <p>This is the configuration that actually compiled. Save as <code>{`C:\\Temp\\StigAudit.ps1`}</code> and run from an Administrator console:</p>
+      <h2>Stage 1: Configuration → MOF</h2>
+      <p>The MOF is the compiled baseline — every rule, every V-number, every desired state, in a single file the DSC engine can consume.</p>
+      <p>This is the configuration that compiles cleanly in GCC High:</p>
       <pre><code>{`Import-Module PowerSTIG -Force
 
 Configuration StigAudit
@@ -174,26 +113,50 @@ Configuration StigAudit
 }
 
 StigAudit -OutputPath C:\\Temp\\AuditMOF`}</code></pre>
-      <p>That's it. Five parameters, exact values, no extras. The MOF lands in <code>{`C:\\Temp\\AuditMOF\\localhost.mof`}</code> — about 306 KB for a full Windows Server 2022 STIG.</p>
+      <p>Five parameters. <code>OsVersion</code> and <code>StigVersion</code> align to the published DISA STIG release. <code>OsRole</code> differentiates Member Server (<code>MS</code>) from Domain Controller (<code>DC</code>) — the two have different control sets. <code>OrgSettings</code> points at the default org-level overrides PowerSTIG ships with the module; in production you swap this for your own customizations.</p>
+      <p>The output lands at <code>{`C:\\Temp\\AuditMOF\\localhost.mof`}</code> — about 306 KB for a full Windows Server 2022 baseline. Inside it: every STIG rule encoded as a DSC resource, every V-number, every expected value, every severity. This is the artifact you store in your evidence repository, version-control, and re-generate when DISA publishes a new STIG release.</p>
+      <p><strong>What this gets you.</strong> The MOF is reproducible and diff-able. Two compilation runs against the same STIG version produce byte-identical output. Two runs across successive STIG releases produce a clean diff showing exactly which controls changed — invaluable when the assessment team asks "what changed since last quarter."</p>
 
-      <h2>What to do once the MOF compiles</h2>
-      <p>Once you have the MOF, three things matter.</p>
-      <p><strong>Audit-mode compliance test.</strong> Run <code>{'Test-DscConfiguration -ReferenceConfiguration <mof> -Detailed -Verbose'}</code> to check the server against every rule without making changes. Takes 10–20 minutes for a full STIG. Output gives you compliant and non-compliant counts per resource.</p>
-      <p><strong>Enriched CSV report.</strong> DSC results don't include V-numbers — those are in the STIG XML data PowerSTIG ships. Use <code>Get-StigList</code> to map back, then export with columns: <code>VulnId</code>, <code>Severity</code>, <code>RuleTitle</code>, <code>Status</code>. This is what auditors actually want.</p>
-      <p><strong>CKL checklist generation.</strong> Use <code>New-StigCheckList</code> to produce a <code>.ckl</code> file for STIG Viewer. This is the format DISA expects — auditor-ready, V-number-aligned, importable into STIG Viewer for evidence collection.</p>
+      <h2>Stage 2: MOF → live compliance state</h2>
+      <p>The MOF describes desired state. <code>Test-DscConfiguration</code> measures the live server against that state without making changes:</p>
+      <pre><code>{`$detailed = Test-DscConfiguration -ReferenceConfiguration C:\\Temp\\AuditMOF\\localhost.mof -Detailed -Verbose
 
-      <h2>The pattern to internalize</h2>
-      <p>If there's one thing to take out of this, it's that DSC error messages in PowerSTIG are <em>chronologically confused</em>. The error you see is whatever broke last during configuration parsing. The actual root cause is usually two or three steps earlier — module resolution, scope conflict, parameter validation — and silent.</p>
-      <blockquote>The error message is always the last thing that happened. The cause is never the last thing that happened.</blockquote>
-      <p>For federal Windows Server STIG automation, the operating rules:</p>
-      <ul>
-        <li>Use a regular Administrator console, not ISE</li>
-        <li>Single <code>-Scope AllUsers</code> install for PowerSTIG, no duplicates across scopes</li>
-        <li>Always specify <code>OsVersion</code>, <code>StigVersion</code>, <code>OsRole</code>, and a real <code>OrgSettings</code> file path</li>
-        <li>Never pass empty hashtables to optional parameters</li>
-        <li>Use <code>$Error.Clear()</code> / <code>$Error</code> dump to expose hidden validation failures</li>
-      </ul>
-      <p>The five-parameter working configuration above is small. Getting to it took two days. The two days are the article.</p>
+Write-Host "Compliant:     $($detailed.ResourcesInDesiredState.Count)"
+Write-Host "Non-Compliant: $($detailed.ResourcesNotInDesiredState.Count)"`}</code></pre>
+      <p>Three things make this stage valuable for federal compliance work.</p>
+      <p><strong>Audit mode is non-destructive.</strong> Nothing on the server changes. You can run this on a production domain controller during business hours and the only side effect is a bit of CPU and a log entry in the DSC event channel. That makes it safe to run continuously, not just during pre-assessment scrambles.</p>
+      <p><strong>Results are deterministic per rule.</strong> Every STIG rule maps to a specific DSC resource, and each resource returns a discrete pass/fail state. There's no ambiguous "partially compliant" or "manual review required" — either the registry value matches or it doesn't.</p>
+      <p><strong>The output is structured data, not a screenshot.</strong> This is the difference between handing an auditor a PDF and handing them a queryable artifact. Every result has a resource name, a status, and a hash of the expected vs actual state.</p>
+      <p><strong>What this gets you.</strong> Continuous compliance verification. You no longer wait until the auditor schedules the next assessment to find out where the server has drifted. The pipeline runs nightly, the deltas surface in your ticketing system, remediation happens before the audit.</p>
+
+      <h2>Stage 3: Compliance state → auditor-ready evidence</h2>
+      <p>DSC results don't speak in DISA's language natively. The audit output references DSC resource names — <code>xRegistry</code>, <code>xService</code>, <code>WindowsFeature</code> — not V-numbers like <code>V-254473</code>. Bridging that gap is the third stage of the pipeline.</p>
+      <p>Two outputs matter for federal work.</p>
+      <p><strong>Enriched CSV.</strong> PowerSTIG's <code>Get-StigList</code> cmdlet exposes the full STIG catalog as structured data, with V-numbers, rule titles, severity, and check definitions. Joining that against the DSC audit results gives you a CSV with the columns auditors actually request:</p>
+      <pre><code>{`VulnId      Severity   RuleTitle                                                  Status
+V-254265    medium     The Windows Server 2022 system must be configured to...    Compliant
+V-254266    high       The Windows Server 2022 system must use multifactor...     Non-Compliant
+V-254267    low        The Windows Server 2022 system must have FIPS-validated... Compliant`}</code></pre>
+      <p>This goes straight into the assessment package. No reformatting, no screenshot collection.</p>
+      <p><strong>CKL file.</strong> STIG Viewer is the tool DISA assessors actually use. Its native format is the <code>.ckl</code> checklist file — XML-structured, V-number-aligned, importable into STIG Viewer for the formal review. PowerSTIG's <code>New-StigCheckList</code> cmdlet generates this file from the audit results:</p>
+      <pre><code>{`New-StigCheckList -DscResult $detailed -XccdfPath $stigXccdf -OutputPath C:\\Temp\\Evidence\\server.ckl`}</code></pre>
+      <p>The CKL imports into STIG Viewer with every finding pre-populated. The assessor reviews, marks closed/open, exports — and the assessment moves at the speed of review, not the speed of evidence collection.</p>
+      <p><strong>What this gets you.</strong> Time-to-evidence drops from weeks to hours. A team running this pipeline goes into a STIG assessment with the CKL already built and the gaps already known. The assessment becomes a review, not a discovery exercise.</p>
+
+      <h2>What's different in GCC High</h2>
+      <p>The pipeline above is the same one you'd run in commercial Azure on a clean lab VM. What makes GCC High harder is the operating environment around it — and operating discipline matters here.</p>
+      <p><strong>Module sourcing.</strong> GCC High tenants pull modules from a closed gallery. PowerSTIG isn't in the default Azure Government PSGallery mirror, so you import it once from a sanctioned offline package, install with <code>-Scope AllUsers</code> exclusively (never duplicated to <code>CurrentUser</code>, which silently breaks DSC module resolution), and version-pin in your environment.</p>
+      <p><strong>Hardened image execution policies.</strong> Many GCC High Windows Server images ship with restricted PowerShell execution policies. Use a regular Administrator console for DSC work — not ISE, which has known scoping issues with the <code>Node</code> keyword in <code>Configuration</code> blocks — and run Configuration blocks from saved <code>.ps1</code> files rather than pasted multi-line input.</p>
+      <p><strong>Evidence retention.</strong> FedRAMP wants the audit trail intact for 12+ months. Pipe DSC operational logs into a Sentinel custom table with a retention policy that matches your accreditation boundary, and version every MOF you compile alongside the source <code>.ps1</code>. The MOF itself is the cleanest evidence artifact — small, deterministic, auditor-friendly.</p>
+
+      <h2>What this enables</h2>
+      <p>A working PowerSTIG pipeline in GCC High changes the economics of STIG compliance from project-mode to operations-mode.</p>
+      <blockquote>STIG compliance moves from "the thing we do before each audit" to "the thing the pipeline produces continuously."</blockquote>
+      <p><strong>Pre-assessment dry runs.</strong> A team running this pipeline goes into a STIG assessment knowing exactly which controls fail and why, with V-number-aligned evidence already exported. The assessor's job becomes review, not discovery.</p>
+      <p><strong>Continuous compliance.</strong> The pipeline runs in CI/CD against representative VMs and on a nightly schedule against production servers. Drift surfaces in tickets. Remediation happens before the audit, not during it.</p>
+      <p><strong>Evidence at the speed of an API call.</strong> When an Authorizing Official asks "show me current STIG posture for this enclave," the answer is a CSV generated this morning, not a six-week evidence collection sprint.</p>
+      <p><strong>Cross-OS coverage.</strong> The same pipeline pattern works for Windows Server 2019, Windows Server 2022, Windows 10/11, Domain Controllers, IIS, SQL Server, and the OpenSSH and RHEL composites PowerSTIG ships. One compilation infrastructure, many baselines.</p>
+      <p>That's the value. The C3PAO assessment becomes a review of evidence the program team already has — not a fire drill.</p>
 
       <hr />
       <p><em>I'm writing weekly on federal Windows STIG automation, PowerSTIG patterns at scale, and the GCC High deployment surface most consultants skip. <a href="#newsletter">Subscribe to the Moore Cyber Memo</a> to get the next one in your inbox.</em></p>
