@@ -81,81 +81,47 @@ const POSTS_CONTENT = {
     <>
       <p>DISA STIG compliance for Windows Server in Azure Government has historically been a manual project. Hundreds of controls, V-numbers, rationale write-ups, screenshots. Multiple weeks per server. The auditor leaves, the program team breathes out, the next assessment is six months away — and someone has to do it all again.</p>
       <p>It doesn't have to be that way.</p>
-      <p>The right PowerSTIG pipeline turns the entire workflow into something repeatable: a single <code>Configuration</code> block compiles into a complete compliance baseline (MOF), audit-mode testing verifies the live server against every STIG rule without making changes, and the results map back to V-numbers in the format DISA auditors actually want. Three stages, every output the assessment process needs.</p>
+      <p>The right PowerSTIG pipeline turns the entire workflow into something repeatable: a single configuration compiles into a complete compliance baseline, audit-mode testing verifies the live server against every STIG rule without making any changes, and the results map back to V-numbers in the format DISA auditors actually want. Three stages, every output the assessment process needs.</p>
       <p>This is the pipeline I ship in GCC High. Here's what it produces.</p>
 
       <h2>The pipeline, end to end</h2>
-      <p>Three stages move from a 30-line PowerShell script to an auditor-ready CKL file.</p>
-      <p><strong>Stage 1: Compile.</strong> A <code>Configuration</code> block calls the <code>WindowsServer</code> composite resource in PowerSTIG. Output: a 306 KB MOF file that defines the desired state for every Windows Server 2022 STIG rule at v2.7. This is the compiled compliance baseline.</p>
-      <p><strong>Stage 2: Verify.</strong> <code>Test-DscConfiguration</code> runs the MOF against the live server in audit mode. No changes. Output: per-rule compliance state — what passed, what failed, what's not measurable. Takes 10–20 minutes for a full STIG.</p>
-      <p><strong>Stage 3: Report.</strong> PowerSTIG's reporting functions enrich the audit results with V-numbers, severities, and rule titles, then export to CSV and CKL. Output: an auditor-ready evidence package.</p>
-      <p>The same pipeline runs against domain controllers (swap one parameter), Windows Server 2019, Windows Server 2025 when the STIG ships, and adjacent OS roles. The compilation infrastructure is the long-lived asset. Everything else is configuration.</p>
+      <p>Three stages move from a thin PowerShell entry point to an auditor-ready CKL file.</p>
+      <p><strong>Stage 1: Compile.</strong> The compliance baseline becomes a single MOF — every Windows Server 2022 STIG rule, every V-number, every desired state, in one artifact the DSC engine can consume.</p>
+      <p><strong>Stage 2: Verify.</strong> The MOF runs against the live server in audit mode. No changes. Output is per-rule compliance state — what passed, what failed, what isn't measurable. Ten to twenty minutes for a full STIG.</p>
+      <p><strong>Stage 3: Report.</strong> Audit results get enriched with V-numbers, severities, and rule titles, then exported to CSV and CKL. Output is an auditor-ready evidence package.</p>
+      <p>The same pipeline runs against domain controllers, Windows Server 2019, Windows Server 2025 when the STIG ships, and adjacent OS roles. The compilation infrastructure is the long-lived asset. Everything else is configuration.</p>
 
-      <h2>Stage 1: Configuration → MOF</h2>
-      <p>The MOF is the compiled baseline — every rule, every V-number, every desired state, in a single file the DSC engine can consume.</p>
-      <p>This is the configuration that compiles cleanly in GCC High:</p>
-      <pre><code>{`Import-Module PowerSTIG -Force
+      <h2>Stage 1 — The compiled baseline</h2>
+      <p>The MOF is the compiled compliance baseline. About 300 KB for a full Windows Server 2022 STIG. Every rule, every V-number, every desired state, encoded as DSC resources in a single file.</p>
+      <p>The artifact matters more than the script that produces it. The MOF is what gets stored, version-controlled, and regenerated when DISA publishes a new STIG release. It's the contract between what the baseline says and what the server has to be.</p>
+      <p><strong>What this gets you.</strong> Reproducibility and diff-ability. Two compilations against the same STIG version produce byte-identical output. Two compilations across successive STIG releases produce a clean diff showing exactly which controls changed — the answer to "what changed since last quarter," ready before the assessment team asks.</p>
 
-Configuration StigAudit
-{
-    Import-DscResource -ModuleName PowerSTIG
+      <h2>Stage 2 — Audit-mode verification</h2>
+      <p>Audit mode measures the live server against the MOF without making any changes. Three properties make this stage valuable for federal compliance work.</p>
+      <p><strong>Non-destructive.</strong> Nothing on the server changes. You can run this on a production domain controller during business hours and the only side effect is some CPU and a log entry. Safe to run continuously, not just during pre-assessment scrambles.</p>
+      <p><strong>Deterministic per rule.</strong> Every STIG rule maps to a discrete pass/fail state. No ambiguous "partially compliant," no "manual review required" — either the configuration matches the baseline or it doesn't.</p>
+      <p><strong>Structured output.</strong> Every result is a typed record with a status and a hash of the expected versus actual state. The difference between handing an auditor a PDF and handing them a queryable artifact.</p>
+      <p><strong>What this gets you.</strong> Continuous compliance verification. You stop waiting until the auditor schedules the next assessment to find out where the server has drifted. The pipeline runs nightly, the deltas surface in tickets, remediation happens before the audit.</p>
 
-    Node 'localhost'
-    {
-        WindowsServer STIG_Baseline
-        {
-            OsVersion   = '2022'
-            StigVersion = '2.7'
-            OsRole      = 'MS'
-            OrgSettings = 'C:\\Program Files\\WindowsPowerShell\\Modules\\PowerSTIG\\4.29.0\\StigData\\Processed\\WindowsServer-2022-MS-2.7.org.default.xml'
-        }
-    }
-}
-
-StigAudit -OutputPath C:\\Temp\\AuditMOF`}</code></pre>
-      <p>Five parameters. <code>OsVersion</code> and <code>StigVersion</code> align to the published DISA STIG release. <code>OsRole</code> differentiates Member Server (<code>MS</code>) from Domain Controller (<code>DC</code>) — the two have different control sets. <code>OrgSettings</code> points at the default org-level overrides PowerSTIG ships with the module; in production you swap this for your own customizations.</p>
-      <p>The output lands at <code>{`C:\\Temp\\AuditMOF\\localhost.mof`}</code> — about 306 KB for a full Windows Server 2022 baseline. Inside it: every STIG rule encoded as a DSC resource, every V-number, every expected value, every severity. This is the artifact you store in your evidence repository, version-control, and re-generate when DISA publishes a new STIG release.</p>
-      <p><strong>What this gets you.</strong> The MOF is reproducible and diff-able. Two compilation runs against the same STIG version produce byte-identical output. Two runs across successive STIG releases produce a clean diff showing exactly which controls changed — invaluable when the assessment team asks "what changed since last quarter."</p>
-
-      <h2>Stage 2: MOF → live compliance state</h2>
-      <p>The MOF describes desired state. <code>Test-DscConfiguration</code> measures the live server against that state without making changes:</p>
-      <pre><code>{`$detailed = Test-DscConfiguration -ReferenceConfiguration C:\\Temp\\AuditMOF\\localhost.mof -Detailed -Verbose
-
-Write-Host "Compliant:     $($detailed.ResourcesInDesiredState.Count)"
-Write-Host "Non-Compliant: $($detailed.ResourcesNotInDesiredState.Count)"`}</code></pre>
-      <p>Three things make this stage valuable for federal compliance work.</p>
-      <p><strong>Audit mode is non-destructive.</strong> Nothing on the server changes. You can run this on a production domain controller during business hours and the only side effect is a bit of CPU and a log entry in the DSC event channel. That makes it safe to run continuously, not just during pre-assessment scrambles.</p>
-      <p><strong>Results are deterministic per rule.</strong> Every STIG rule maps to a specific DSC resource, and each resource returns a discrete pass/fail state. There's no ambiguous "partially compliant" or "manual review required" — either the registry value matches or it doesn't.</p>
-      <p><strong>The output is structured data, not a screenshot.</strong> This is the difference between handing an auditor a PDF and handing them a queryable artifact. Every result has a resource name, a status, and a hash of the expected vs actual state.</p>
-      <p><strong>What this gets you.</strong> Continuous compliance verification. You no longer wait until the auditor schedules the next assessment to find out where the server has drifted. The pipeline runs nightly, the deltas surface in your ticketing system, remediation happens before the audit.</p>
-
-      <h2>Stage 3: Compliance state → auditor-ready evidence</h2>
-      <p>DSC results don't speak in DISA's language natively. The audit output references DSC resource names — <code>xRegistry</code>, <code>xService</code>, <code>WindowsFeature</code> — not V-numbers like <code>V-254473</code>. Bridging that gap is the third stage of the pipeline.</p>
+      <h2>Stage 3 — Auditor-ready evidence</h2>
+      <p>DSC speaks in resource names. DISA speaks in V-numbers. Bridging that gap is what makes the pipeline output assessment-ready.</p>
       <p>Two outputs matter for federal work.</p>
-      <p><strong>Enriched CSV.</strong> PowerSTIG's <code>Get-StigList</code> cmdlet exposes the full STIG catalog as structured data, with V-numbers, rule titles, severity, and check definitions. Joining that against the DSC audit results gives you a CSV with the columns auditors actually request:</p>
-      <pre><code>{`VulnId      Severity   RuleTitle                                                  Status
-V-254265    medium     The Windows Server 2022 system must be configured to...    Compliant
-V-254266    high       The Windows Server 2022 system must use multifactor...     Non-Compliant
-V-254267    low        The Windows Server 2022 system must have FIPS-validated... Compliant`}</code></pre>
-      <p>This goes straight into the assessment package. No reformatting, no screenshot collection.</p>
-      <p><strong>CKL file.</strong> STIG Viewer is the tool DISA assessors actually use. Its native format is the <code>.ckl</code> checklist file — XML-structured, V-number-aligned, importable into STIG Viewer for the formal review. PowerSTIG's <code>New-StigCheckList</code> cmdlet generates this file from the audit results:</p>
-      <pre><code>{`New-StigCheckList -DscResult $detailed -XccdfPath $stigXccdf -OutputPath C:\\Temp\\Evidence\\server.ckl`}</code></pre>
-      <p>The CKL imports into STIG Viewer with every finding pre-populated. The assessor reviews, marks closed/open, exports — and the assessment moves at the speed of review, not the speed of evidence collection.</p>
-      <p><strong>What this gets you.</strong> Time-to-evidence drops from weeks to hours. A team running this pipeline goes into a STIG assessment with the CKL already built and the gaps already known. The assessment becomes a review, not a discovery exercise.</p>
+      <p><strong>Enriched CSV.</strong> Audit results joined against the STIG catalog produce a per-rule report with VulnId, Severity, RuleTitle, and Status — the exact columns assessors request. No reformatting, no screenshot collection. It goes straight into the assessment package.</p>
+      <p><strong>CKL file.</strong> STIG Viewer is the tool DISA assessors actually use. Its native format is the .ckl checklist — XML-structured, V-number-aligned. The pipeline generates the CKL directly from the audit results with every finding pre-populated. The assessor reviews, marks closed or open, exports — and the assessment moves at the speed of review, not the speed of evidence collection.</p>
+      <p><strong>What this gets you.</strong> Time-to-evidence drops from weeks to hours. A team running this pipeline walks into a STIG assessment with the CKL already built and the gaps already known. The assessment becomes a review, not a discovery exercise.</p>
 
       <h2>What's different in GCC High</h2>
-      <p>The pipeline above is the same one you'd run in commercial Azure on a clean lab VM. What makes GCC High harder is the operating environment around it — and operating discipline matters here.</p>
-      <p><strong>Module sourcing.</strong> GCC High tenants pull modules from a closed gallery. PowerSTIG isn't in the default Azure Government PSGallery mirror, so you import it once from a sanctioned offline package, install with <code>-Scope AllUsers</code> exclusively (never duplicated to <code>CurrentUser</code>, which silently breaks DSC module resolution), and version-pin in your environment.</p>
-      <p><strong>Hardened image execution policies.</strong> Many GCC High Windows Server images ship with restricted PowerShell execution policies. Use a regular Administrator console for DSC work — not ISE, which has known scoping issues with the <code>Node</code> keyword in <code>Configuration</code> blocks — and run Configuration blocks from saved <code>.ps1</code> files rather than pasted multi-line input.</p>
-      <p><strong>Evidence retention.</strong> FedRAMP wants the audit trail intact for 12+ months. Pipe DSC operational logs into a Sentinel custom table with a retention policy that matches your accreditation boundary, and version every MOF you compile alongside the source <code>.ps1</code>. The MOF itself is the cleanest evidence artifact — small, deterministic, auditor-friendly.</p>
+      <p>The pipeline architecture is identical to what runs in commercial Azure. What makes GCC High harder is the operating surface around it.</p>
+      <p>Sovereign cloud module sourcing follows different rules than the public registry. Hardened image execution policies shape how every component runs. FedRAMP retention requirements make evidence collection a first-class output, not a bolt-on. Most consultants underestimate this surface area, slip the timeline, and call it "sovereign cloud weirdness."</p>
+      <p>It isn't weirdness. It's discipline. The MOF is still the cleanest evidence artifact in this environment — small, deterministic, auditor-friendly. The surrounding pipeline has to be designed for federal-tenant constraints from day one, not retrofitted in week eight.</p>
 
       <h2>What this enables</h2>
       <p>A working PowerSTIG pipeline in GCC High changes the economics of STIG compliance from project-mode to operations-mode.</p>
       <blockquote>STIG compliance moves from "the thing we do before each audit" to "the thing the pipeline produces continuously."</blockquote>
-      <p><strong>Pre-assessment dry runs.</strong> A team running this pipeline goes into a STIG assessment knowing exactly which controls fail and why, with V-number-aligned evidence already exported. The assessor's job becomes review, not discovery.</p>
+      <p><strong>Pre-assessment dry runs.</strong> A team running this pipeline walks into the assessment knowing exactly which controls fail and why, with V-number-aligned evidence already exported. The assessor's job becomes review, not discovery.</p>
       <p><strong>Continuous compliance.</strong> The pipeline runs in CI/CD against representative VMs and on a nightly schedule against production servers. Drift surfaces in tickets. Remediation happens before the audit, not during it.</p>
-      <p><strong>Evidence at the speed of an API call.</strong> When an Authorizing Official asks "show me current STIG posture for this enclave," the answer is a CSV generated this morning, not a six-week evidence collection sprint.</p>
-      <p><strong>Cross-OS coverage.</strong> The same pipeline pattern works for Windows Server 2019, Windows Server 2022, Windows 10/11, Domain Controllers, IIS, SQL Server, and the OpenSSH and RHEL composites PowerSTIG ships. One compilation infrastructure, many baselines.</p>
+      <p><strong>Evidence at the speed of an API call.</strong> When an Authorizing Official asks "show me current STIG posture for this enclave," the answer is a report generated this morning, not a six-week evidence collection sprint.</p>
+      <p><strong>Cross-OS coverage.</strong> The same pipeline pattern works for Windows Server 2019, 2022, 2025, Windows 10/11, Domain Controllers, IIS, SQL Server, and the OpenSSH and RHEL composites PowerSTIG ships. One compilation infrastructure, many baselines.</p>
       <p>That's the value. The C3PAO assessment becomes a review of evidence the program team already has — not a fire drill.</p>
 
       <hr />

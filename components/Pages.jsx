@@ -128,7 +128,7 @@ const POSTS = [
     publishDate: 'Apr 4, 2026',
     publishDateLong: 'April 4, 2026',
     tags: ['STIG', 'PowerSTIG', 'GCC High', 'Federal', 'Compliance'],
-    readTime: '8 min',
+    readTime: '6 min',
     live: true,
   },
   {
