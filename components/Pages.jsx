@@ -466,8 +466,8 @@ function AgenticCyberPage({ navigate }) {
         <div className="container">
           <div className="section-label">// Agentic Cyber</div>
           <h1 className="page-title display">
-            The agent isn't<br />
-            replacing the SOC.<br />
+            Artificial Intelligence<br />
+            isn't replacing the SOC.<br />
             It's the <em>query layer</em><br />
             between them.
           </h1>
