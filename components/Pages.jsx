@@ -230,7 +230,7 @@ function ServicesPage({ navigate }) {
             Full coverage <em>across.</em>
           </h1>
           <p className="page-intro">
-            The Cloud security stack is broad. Most clients don't need everything at once — they need the right engagement model for the problem they actually have. Three tiers based on how you want to work together, with full capability coverage underneath. No retainer traps, no scope creep, no surprise invoices.
+            The Microsoft security stack is broad. Most clients don't need everything at once — they need the right engagement model for the problem they actually have. Three tiers based on how you want to work together, with full capability coverage underneath. No retainer traps, no scope creep, no surprise invoices.
           </p>
         </div>
       </section>
@@ -260,7 +260,7 @@ function ServicesPage({ navigate }) {
                 <ul className="tier-examples-list">
                   <li>Conditional Access policy review</li>
                   <li>KQL detection authoring</li>
-                  <li>Defender XDR alert tuning</li>
+                  <li>Microsoft Defender XDR alert tuning</li>
                   <li>Curriculum or training authorship</li>
                   <li>Architecture pre-deployment review</li>
                 </ul>
@@ -300,7 +300,7 @@ function ServicesPage({ navigate }) {
               <h3 className="tier-title">Done-For-You Build</h3>
               <div className="tier-price">Project-based · From $25,000</div>
               <p className="tier-description">
-                End-to-end implementation across the Cloud security stack. Fixed scope, fixed price, 2–12 week delivery.
+                End-to-end implementation across the Microsoft security stack. Fixed scope, fixed price, 2–12 week delivery.
               </p>
               <ul className="tier-features">
                 <li>Fixed-scope, fixed-price</li>
@@ -311,11 +311,11 @@ function ServicesPage({ navigate }) {
               <div className="tier-examples">
                 <div className="tier-examples-label">// Recent examples</div>
                 <ul className="tier-examples-list">
-                  <li>GCC High Sentinel deployment</li>
-                  <li>Three-tier Logic App SOAR</li>
+                  <li>GCC High Microsoft Sentinel deployment</li>
+                  <li>Three-tier Azure Logic Apps SOAR</li>
                   <li>Multi-tenant MDR architecture</li>
-                  <li>Purview DLP program standup</li>
-                  <li>Defender for Cloud baseline</li>
+                  <li>Microsoft Purview DLP program standup</li>
+                  <li>Microsoft Defender for Cloud baseline</li>
                 </ul>
               </div>
               <a href="#" className="btn btn-secondary" onClick={(e) => goContact(e)}>Scope a Build</a>
@@ -325,7 +325,7 @@ function ServicesPage({ navigate }) {
         </div>
       </section>
 
-      <AsciiDivider>░░░ CLOUD SECURITY STACK ░░░</AsciiDivider>
+      <AsciiDivider>░░░ MICROSOFT SECURITY STACK ░░░</AsciiDivider>
 
       <section className="section">
         <div className="container">
@@ -337,13 +337,13 @@ function ServicesPage({ navigate }) {
             What I deliver across the stack. If a capability you need isn't here, ask — chances are it's adjacent to something I've shipped.
           </p>
           <div className="capabilities-grid capabilities-grid-3col">
-            <Capability code="SEN" title="Sentinel" body="SIEM deployment, content engineering, KQL detection authoring, ASIM normalization, multi-tenant MSSP architecture, Sentinel Data Lake integration, log routing strategy across commercial and GCC High tenants." tags={['KQL','ASIM','Multi-Tenant','Data Lake']} />
-            <Capability code="XDR" title="Defender XDR" body="Defender for Endpoint, Office 365, Identity, and Cloud Apps. Threat hunting, incident response tuning, alert prioritization, custom detection rules, attack disruption configuration, and integration with Sentinel for unified investigation." tags={['MDE','MDO','MDI','MDA']} />
-            <Capability code="DFC" title="Defender for Cloud" body="Azure security posture management, regulatory compliance dashboards, cloud workload protection, multi-cloud connectors, JIT VM access, defender plans tuning, and Arc-managed server posture across hybrid environments." tags={['CSPM','CWPP','Arc','Multi-Cloud']} />
-            <Capability code="PUR" title="Purview" body="Data Loss Prevention, information protection labeling, insider risk management, communication compliance, eDiscovery, Compliance Manager, and Data Security Posture Management (DSPM) for AI." tags={['DLP','Sensitivity Labels','DSPM','eDiscovery']} />
-            <Capability code="MEM" title="Intune & Endpoint" body="Mobile device management, app protection policies, Autopilot deployment, hybrid Azure AD join, device compliance baselines, security baselines, and BYOD strategy for federal and commercial environments." tags={['MDM','MAM','Autopilot','Compliance']} />
-            <Capability code="IAM" title="Entra (Azure AD)" body="Conditional Access design, identity governance, Privileged Identity Management, B2B and B2C identity, Verified ID, identity protection policies, and zero-trust identity architecture." tags={['Conditional Access','PIM','ZTA','Verified ID']} />
-            <Capability code="SOAR" title="Logic Apps SOAR" body="Three-tier orchestrator-decision-execution architecture. Threat intelligence enrichment via DomainTools, BloxOne, FortiAnalyzer, and Defender ATP. Automated response playbooks with human-in-the-loop approval gates." tags={['Logic Apps','Playbooks','Enrichment','HITL']} />
+            <Capability code="SEN" title="Microsoft Sentinel" body="SIEM deployment, content engineering, KQL detection authoring, ASIM normalization, multi-tenant MSSP architecture, Sentinel Data Lake integration, log routing strategy across commercial and GCC High tenants." tags={['KQL','ASIM','Multi-Tenant','Data Lake']} />
+            <Capability code="XDR" title="Microsoft Defender XDR" body="Defender for Endpoint, Office 365, Identity, and Cloud Apps. Threat hunting, incident response tuning, alert prioritization, custom detection rules, attack disruption configuration, and integration with Sentinel for unified investigation." tags={['MDE','MDO','MDI','MDA']} />
+            <Capability code="DFC" title="Microsoft Defender for Cloud" body="Azure security posture management, regulatory compliance dashboards, cloud workload protection, multi-cloud connectors, JIT VM access, defender plans tuning, and Arc-managed server posture across hybrid environments." tags={['CSPM','CWPP','Arc','Multi-Cloud']} />
+            <Capability code="PUR" title="Microsoft Purview" body="Data Loss Prevention, information protection labeling, insider risk management, communication compliance, eDiscovery, Compliance Manager, and Data Security Posture Management (DSPM) for AI." tags={['DLP','Sensitivity Labels','DSPM','eDiscovery']} />
+            <Capability code="MEM" title="Microsoft Intune" body="Mobile device management, app protection policies, Autopilot deployment, hybrid Entra join, device compliance baselines, security baselines, and BYOD strategy for federal and commercial environments." tags={['MDM','MAM','Autopilot','Compliance']} />
+            <Capability code="IAM" title="Microsoft Entra ID" body="Conditional Access design, identity governance, Privileged Identity Management, B2B and B2C identity, Verified ID, identity protection policies, and zero-trust identity architecture." tags={['Conditional Access','PIM','ZTA','Verified ID']} />
+            <Capability code="SOAR" title="Azure Logic Apps SOAR" body="Three-tier orchestrator-decision-execution architecture. Threat intelligence enrichment via DomainTools, BloxOne, FortiAnalyzer, and Defender ATP. Automated response playbooks with human-in-the-loop approval gates." tags={['Logic Apps','Playbooks','Enrichment','HITL']} />
             <Capability code="GOV" title="Azure Policy & Governance" body="STIG automation via PowerSTIG and Azure Machine Configuration. CMMC control mapping, custom policy authoring, exemption patterns, and audit-grade evidence collection through custom Sentinel tables." tags={['STIG','CMMC','Policy','Evidence']} />
             <Capability code="AGT" title="Agentic Cyber & MCP" body="Custom Model Context Protocol server development, agentic SOC workflows, AI-native detection engineering, Claude and OpenAI API integration, and MCP-based investigation orchestration." tags={['MCP','Claude API','Agentic SOC','AI Detection']} />
           </div>

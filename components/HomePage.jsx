@@ -205,7 +205,7 @@ function Tiers({ navigate }) {
         <h3 className="tier-title">Done-For-You Build</h3>
         <div className="tier-price">Project-based · From $25,000</div>
         <p className="tier-description">
-          End-to-end implementation across the Cloud security stack. GCC High Sentinel quick-start, SOAR architecture, KQL detection packs, or MCP agent workflows — delivered in 2–12 weeks.
+          End-to-end implementation across the Microsoft security stack. GCC High Microsoft Sentinel quick-start, Azure Logic Apps SOAR architecture, KQL detection packs, or MCP agent workflows — delivered in 2–12 weeks.
         </p>
         <ul className="tier-features">
           <li>Fixed-scope, fixed-price</li>
