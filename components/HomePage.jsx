@@ -13,7 +13,6 @@ function HomePage({ navigate }) {
             <span>Defender XDR</span>
             <span>Purview</span>
             <span>Writing weekly</span>
-            <span className="no-dot">Available Now</span>
           </div>
 
           <div className="hero-grid">
