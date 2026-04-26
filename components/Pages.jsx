@@ -112,6 +112,16 @@ function AboutPage({ navigate }) {
 
 const POSTS = [
   {
+    slug: 'checking-the-checker',
+    title: 'Checking the Checker: Validating AI Security Work',
+    description: "When an AI agent closes a finding as benign, who verifies the agent was right? The discipline that separates AI-augmented SOCs from teams about to learn the hard way.",
+    publishDate: 'Apr 25, 2026',
+    publishDateLong: 'April 25, 2026',
+    tags: ['Agentic', 'AI Trust', 'Validation', 'Detection', 'Operator Take'],
+    readTime: '6 min',
+    live: true,
+  },
+  {
     slug: 'agentic-soc-mcp-data-lake',
     title: 'The Agentic SOC, MCP, and the Security Data Lake Problem',
     description: "Why the next generation of SOC automation lives in the data lake, not the SIEM — and how MCP servers change who gets to query it.",

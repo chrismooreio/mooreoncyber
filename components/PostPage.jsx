@@ -2,6 +2,47 @@
 // Looks up metadata from window.POSTS (defined in Pages.jsx) and body content from POSTS_CONTENT below.
 
 const POSTS_CONTENT = {
+  'checking-the-checker': () => (
+    <>
+      <p>Three years ago, the question for AI in security operations was <em>can it work.</em> Today it's <em>can we trust it.</em> A year from now it'll be the only question that matters.</p>
+      <p>Every commercial MDR shop and federal SOC I've worked with is integrating AI into the detection and vulnerability surface. Triage agents that disposition alerts. Models that score CVEs against an environment. LLM-powered investigators that summarize incidents. Agents that suggest remediation paths and, in some shops, take the action themselves.</p>
+      <p>This work is producing real value. It's also producing a problem the industry isn't yet prepared to talk about openly: when an AI agent closes a finding as benign, who verifies the agent was right?</p>
+      <p>This is the checker problem. And the way most teams are answering it — informally, by spot-check, with no discipline — is going to surface in incident retrospectives over the next eighteen months.</p>
+
+      <h2>The compounding error nobody is metering</h2>
+      <p>The traditional SOC has a measurable false-positive rate because every alert eventually crosses a human's desk. The denominator is visible. The human sees the noise, learns the pattern, and the team can argue honestly about whether the detection is too loose or too tight.</p>
+      <p>Insert an AI triage agent and that denominator disappears. The human now reviews only what the agent escalated. The only feedback the team gets is on the alerts the agent thought were worth a human's time. The alerts the agent quietly closed never enter the discussion.</p>
+      <p>The compounding error is obvious in hindsight. The agent learned a pattern during training or prompt design — say, that any login from a known cloud egress is benign. Six months later, threat actors are routing through known cloud egresses on purpose. The agent keeps closing those alerts as benign. The team has no visibility into the closures because the closures don't generate tickets.</p>
+      <p>This isn't hypothetical. It's the failure mode of every automation layer that doesn't keep a human in some kind of audit loop. We've seen it with SOAR playbooks. With auto-suppression rules. With vendor-shipped allowlists. The AI agent is the same problem at higher confidence and lower transparency.</p>
+
+      <h2>What checking the checker actually looks like</h2>
+      <p>The discipline isn't complicated. The teams that haven't built it yet just haven't named the problem yet.</p>
+      <p><strong>Sampling.</strong> Take a random sample of the agent's closed-as-benign decisions every week and put it in front of a senior analyst. Not a review of escalations — a review of dismissals. This is exactly the way regulated call centers sample agent calls, the way airlines sample crew decisions, the way labs sample QC. The sample doesn't have to be large. It just has to exist.</p>
+      <p><strong>Adversarial probing.</strong> Build a corpus of known-malicious patterns and feed them to the agent on a regular cadence. New CVEs. Crafted alerts. Synthetic phishing payloads. Track the agent's hit rate over time. When a model changes — when the vendor pushes an update, when a prompt is tuned, when the underlying API moves a version — the corpus tells you immediately whether the agent's coverage moved with it.</p>
+      <p><strong>Drift instrumentation.</strong> Every tool call the agent makes, every decision it produces, every confidence score it assigns — logged. Not for the audit. For the trend line. Most teams discover their agent has degraded from a customer escalation. The teams that instrument can see degradation in the metrics weeks earlier.</p>
+      <p>These three together cost less than one full-time analyst and protect against the entire class of <em>we trusted the agent and it missed it</em> failure modes that are coming.</p>
+
+      <h2>The audit dimension nobody priced in</h2>
+      <p>In federal environments and increasingly in regulated commercial ones, the question gets sharper. An assessor asks: how do you know your AI-assisted vulnerability triage is sound? What's your evidence?</p>
+      <blockquote>"The vendor's eval scores" is not an answer. The vendor's evals tested the model on their corpus, in their environment, against their threat assumptions. None of that reflects your environment, your threat surface, or the controls you claim.</blockquote>
+      <p>The teams that can answer the assessor's question with their own sampling data, their own adversarial corpus, and their own drift charts have an audit posture. The teams that can't are about to learn that <em>the AI handles it</em> is the new <em>we have a firewall.</em></p>
+
+      <h2>Why this is an operator problem, not a vendor problem</h2>
+      <p>Every AI security vendor is building eval tooling and explainability features into their products. That's good. It's also not the answer.</p>
+      <p>The vendor's eval is the vendor's view of the agent's behavior. Your view of the agent's behavior — in your environment, on your data, against your threats — is yours to build. The same way your SIEM detection content is yours to author and your SOC playbooks are yours to maintain. Outsourcing the validation of AI security work to the vendor that sold you the AI security tool is exactly the conflict-of-interest pattern that brought us SOC 2 reports nobody trusts.</p>
+      <p>The teams that figure this out first build a real moat. Their AI security work compounds in trustworthiness over time. The teams that wait are about to discover that <em>the model decided</em> is the new <em>the vendor said it was secure.</em></p>
+
+      <h2>The part that actually matters</h2>
+      <p>Strip away the methodology. The reason this matters is simpler than the framework makes it look.</p>
+      <p>The next generation of security incidents are not going to be pattern-matched against the last generation. The adversaries know your tooling. They know your AI tooling specifically. They are already crafting techniques designed to look benign to a triage model and known to a human analyst.</p>
+      <p>Checking the checker is how you keep the human's pattern recognition in the loop without giving up the throughput the agent provides. It's not friction on the AI. It's the discipline that makes the AI worth deploying.</p>
+      <p>The defenders who build this discipline now stay ahead. The ones who don't — and discover the problem in retrospective — become the cautionary tales the next wave of operators learn from.</p>
+
+      <hr />
+      <p><em>I'm writing weekly on agentic SOC architecture, AI security validation, and the federal Cloud security surface most consultants skip. <a href="#newsletter">Subscribe to the Moore Cyber Memo</a> to get the next one in your inbox.</em></p>
+    </>
+  ),
+
   'agentic-soc-mcp-data-lake': () => (
     <>
       <p>Every federal SOC I've walked into in the last three years has the same shape. Sentinel on top. A lake of cold storage somewhere underneath — ADX, Log Analytics at basic tier, Purview, maybe Snowflake for the data science team that got budget last year. And a thick layer of Logic Apps and Python scripts bridging the two, written by whoever was on-call when the ask came in.</p>

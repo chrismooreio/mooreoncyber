@@ -93,6 +93,17 @@ function HomePage({ navigate }) {
           </p>
 
           <div className="writing-list">
+            <a href="#" className="writing-card" onClick={(e) => { e.preventDefault(); navigate('post', 'checking-the-checker'); }}>
+              <div className="writing-meta">
+                <span className="writing-tag">AI Trust</span>
+                <span className="writing-date">Apr 25, 2026</span>
+              </div>
+              <h3 className="writing-title">Checking the Checker: Validating AI Security Work</h3>
+              <p className="writing-excerpt">
+                When an AI agent closes a finding as benign, who verifies the agent was right? The discipline that separates AI-augmented SOCs from teams about to learn the hard way.
+              </p>
+              <div className="writing-read-more">Read the field report →</div>
+            </a>
             <a href="#" className="writing-card" onClick={(e) => { e.preventDefault(); navigate('post', 'agentic-soc-mcp-data-lake'); }}>
               <div className="writing-meta">
                 <span className="writing-tag">Agentic</span>
@@ -112,17 +123,6 @@ function HomePage({ navigate }) {
               <h3 className="writing-title">The GCCHigh Sentinel Deployment Playbook</h3>
               <p className="writing-excerpt">
                 Connector gaps, ASIM edge cases, the M365 → Sentinel pipeline in sovereign cloud, and every mistake I've watched primes make.
-              </p>
-              <div className="writing-read-more">Subscribe to get it first →</div>
-            </a>
-            <a href="#" className="writing-card writing-card-ghost" onClick={(e) => { e.preventDefault(); navigate('writing'); }}>
-              <div className="writing-meta">
-                <span className="writing-tag">SOAR</span>
-                <span className="writing-date">Coming soon</span>
-              </div>
-              <h3 className="writing-title">Three-Tier Logic App SOAR — Commercial &amp; Federal</h3>
-              <p className="writing-excerpt">
-                Orchestrator / decision engine / execution — the architecture I ship when SOCs are drowning in alerts and Logic Apps have turned into spaghetti.
               </p>
               <div className="writing-read-more">Subscribe to get it first →</div>
             </a>
