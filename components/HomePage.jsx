@@ -18,13 +18,12 @@ function HomePage({ navigate }) {
           <div className="hero-grid">
             <div>
               <h1 className="display hero-h1">
-                Cloud security,<br />
-                <em>extracted</em>—<br />
-                not&nbsp;accumulated.
+                You bought enterprise security.<br />
+                Let's make it <em>act</em> like it.
               </h1>
 
               <p className="hero-sub">
-                Most organizations are running their Cloud security stack at 20% capacity. E5 licensed. Sentinel deployed. Defender XDR untuned. Purview unconfigured. I'm the operator you bring in when the spend is already booked and the value still isn't showing up.
+                You licensed E5. Deployed Sentinel. Bought Defender XDR and Purview. Now you're watching the stack run at 20% capacity. That's the gap I close. Before renewal hits and the spend has to justify itself.
               </p>
 
               <div className="hero-actions">
@@ -58,23 +57,52 @@ function HomePage({ navigate }) {
 
       <AsciiDivider>░░░░ COMMERCIAL // FEDERAL // CLEARED ░░░░</AsciiDivider>
 
-      {/* THESIS */}
+      {/* WHO THIS IS FOR */}
       <section className="section">
         <div className="container">
-          <div className="section-label">01 / The Thesis</div>
+          <div className="section-label">// Three audiences · One operator</div>
           <h2 className="section-title display">
-            Your license is <em>already paid for.</em><br />
-            The value isn't getting extracted.
+            Who I <em>help.</em>
           </h2>
           <p className="section-intro">
-            Commercial enterprises and federal contractors are buying Cloud security licenses they're using at 20% capacity. E5 stacks sitting idle. Sentinel workspaces collecting logs nobody queries. Defender XDR deployed and untuned. Purview purchased and unconfigured. The spend is booked. The value isn't.
+            Initial deployment, Tuning, and Validating. I step in at any stage of the journey. Here's the version of "you" I work with most.
+          </p>
+          <div className="audience-grid audience-grid-3col">
+            <div className="audience">
+              <div className="audience-label">// 01</div>
+              <h4>Commercial security leaders</h4>
+              <p>Your E5 is licensed. Sentinel and Defender XDR are deployed. The dashboards are green and your CFO still doesn't know what the license actually bought. You want the value extracted before renewal — without buying more tools.</p>
+            </div>
+            <div className="audience">
+              <div className="audience-label">// 02</div>
+              <h4>Federal primes &amp; cleared programs</h4>
+              <p>GCC High Sentinel slipping. STIG automation breaking workloads. CMMC Level 2 readiness on the calendar. You need an operator who has actually shipped this into Azure Government — not someone reading the documentation alongside you.</p>
+            </div>
+            <div className="audience">
+              <div className="audience-label">// 03</div>
+              <h4>MSSP &amp; MDR practices</h4>
+              <p>Multi-tenant Sentinel, KQL detection packs, and an agentic SOC roadmap your competitors haven't shipped yet. You need someone who's run both the customer side and the operator side.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* THE JOURNEY */}
+      <section className="section">
+        <div className="container">
+          <div className="section-label">01 / The Journey</div>
+          <h2 className="section-title display">
+            Wherever you are. <em>One operator.</em>
+          </h2>
+          <p className="section-intro">
+            Most Cloud security work falls into one of four stages. Most consultants only do one or two. I work the whole journey — and if you're not sure where you are, that's the first scoping-call question.
           </p>
 
           <div className="problems-grid">
-            <ProblemCard num="// 01" title={<>GCCHigh Sentinel <em>isn't</em> commercial Sentinel.</>} body="Connector gaps, ASIM normalization edge cases, CMMC overlap — most teams underestimate how different the sovereign cloud is until deployment slips six months. I've shipped it multiple times." />
-            <ProblemCard num="// 02" title={<>DISA STIG automation, <em>without</em> breaking workloads.</>} body="PowerSTIG, Azure Machine Configuration, custom Sentinel evidence tables. Automated hardening that survives audits and doesn't wreck production." />
-            <ProblemCard num="// 03" title={<>SOAR that the SOC <em>actually</em> uses.</>} body="Three-tier Logic App architecture — orchestrator, decision engine, execution — with DomainTools, FortiAnalyzer, BloxOne, and Defender ATP enrichment. Real SOAR, not demo-ware." />
-            <ProblemCard num="// 04" title={<>Agentic cyber is <em>coming</em> — most shops aren't ready.</>} body="MCP servers, agent workflows, AI-native detection engineering. The defenders who integrate this early keep the advantage. The ones who wait become the training data." />
+            <ProblemCard num="// 01 · Deploy" title={<>Initial <em>deployment.</em></>} body="Sentinel quick-start, Defender XDR baseline, Purview foundation, Intune and Entra setup, GCC High tenant architecture. Greenfield builds or expansion into new tenants — built right the first time." />
+            <ProblemCard num="// 02 · Tune" title={<><em>Tuning</em> what's deployed.</>} body="KQL detection authoring, alert prioritization, ASIM normalization, Conditional Access design, policy refinement. Turning green dashboards into detections that actually fire on real threats." />
+            <ProblemCard num="// 03 · Validate" title={<><em>Validating</em> against the bar.</>} body="CMMC gap assessment, DISA STIG automation, audit-mode compliance verification, control mapping, evidence pipelines. Proving the stack does what you bought it for." />
+            <ProblemCard num="// 04 · Operate" title={<>Long-term <em>operation.</em></>} body="Three-tier Logic App SOAR, agentic SOC integration, multi-tenant MSSP architecture, ongoing detection engineering. The defenders who integrate early keep the advantage. The ones who wait become the training data." />
           </div>
         </div>
       </section>
@@ -143,7 +171,7 @@ function HomePage({ navigate }) {
             Three ways in. <em>No retainer traps.</em>
           </h2>
           <p className="section-intro">
-            Every engagement starts with a scoping call and ends with a defined deliverable. No open-ended hourly contracts, no scope creep, no surprise invoices.
+            Six months from now: your Sentinel workspace fires on real threats, not the same three false positives. Your Defender XDR dashboard shows what it bought. Your CFO stops asking. Every engagement starts with a free scoping call and ends with a defined deliverable — no retainer traps, no scope creep, no surprise invoices.
           </p>
           <Tiers navigate={navigate} />
           <div style={{ marginTop: 48 }}>

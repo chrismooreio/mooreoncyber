@@ -7,11 +7,13 @@ function AboutPage({ navigate }) {
         <div className="container">
           <div className="section-label">// About</div>
           <h1 className="page-title display">
-            Six years <em>Army.</em><br />
-            Seven years <em>cyber.</em><br />
-            Same instincts.<br />
-            Different adversary.
+            You're handing someone<br />
+            the keys to your stack.<br />
+            Make sure they've <em>held the line</em> before.
           </h1>
+          <p className="page-intro">
+            Six years Army. Seven years cyber. Same instincts, different adversary.
+          </p>
         </div>
       </section>
 
@@ -80,7 +82,7 @@ function AboutPage({ navigate }) {
               In three years, this practice is the commercial and federal advisory shop that enterprises, primes, and cleared programs call when their Cloud security stack is underperforming and they've run out of patience for vendor pitches.
             </p>
             <p>
-              Boutique by design. Known for <em>extraction, not accumulation.</em> The operator you bring in when the license is already paid for and the value still isn't showing up.
+              Boutique by design. Known for <em>making the stack act like it.</em> The operator you call when the license is already paid for and the value still isn't showing up.
             </p>
 
             <hr />
@@ -250,7 +252,7 @@ function ServicesPage({ navigate }) {
             Full coverage <em>across.</em>
           </h1>
           <p className="page-intro">
-            The Microsoft security stack is broad. Most clients don't need everything at once — they need the right engagement model for the problem they actually have. Three tiers based on how you want to work together, with full capability coverage underneath. No retainer traps, no scope creep, no surprise invoices.
+            You're not in the market for more tooling — you've already got more than you're using. You're in the market for someone to make the stack act like it. Three engagement models below, with full capability coverage underneath. No retainer traps, no scope creep, no surprise invoices.
           </p>
         </div>
       </section>
@@ -486,10 +488,9 @@ function AgenticCyberPage({ navigate }) {
         <div className="container">
           <div className="section-label">// Agentic Cyber</div>
           <h1 className="page-title display">
-            Artificial Intelligence<br />
-            isn't replacing the SOC.<br />
-            It's the <em>query layer</em><br />
-            between them.
+            Ship the agentic SOC.<br />
+            Before you become<br />
+            the <em>training data.</em>
           </h1>
           <p className="page-intro">
             MCP servers, agent architectures for security operations, and AI-native workflow automation. Where commercial and federal Cloud security meet the agent infrastructure most teams are still six months away from needing.

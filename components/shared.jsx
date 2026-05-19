@@ -33,7 +33,7 @@ function Nav({ currentPath, navigate }) {
         className="nav-cta"
         onClick={(e) => { e.preventDefault(); navigate('contact'); }}
       >
-        Contact
+        Free Scoping Call
       </a>
     </nav>
   );
@@ -48,7 +48,7 @@ function Footer({ navigate }) {
         <div>
           <div className="footer-brand-name">Christopher Moore</div>
           <p className="footer-brand-desc">
-            Commercial and federal cybersecurity architecture. Cloud security extraction, not accumulation. Practicing operator, not a vendor. Written under Moore Security Group LLC.
+            Commercial and federal cybersecurity architecture. Making the enterprise security you already bought act like it. Practicing operator, not a vendor. Written under Moore Security Group LLC.
           </p>
         </div>
         <div>
@@ -102,11 +102,11 @@ function Newsletter() {
         <div className="newsletter-block">
           <div className="newsletter-label">// Moore Cyber Memo · Weekly</div>
           <h3 className="display">
-            Field reports from inside<br />
-            the <em>Cloud security</em> stack.
+            One field report a week.<br />
+            The piece you'd want <em>forwarded</em> to your CISO.
           </h3>
           <p>
-            Every week, one practical piece on Sentinel, Defender XDR, STIG automation, agentic SOC, or the GCCHigh plumbing most consultants can't actually work in. Written for operators, by an operator. No fluff, no vendor pitches.
+            Practical pieces on Sentinel, Defender XDR, STIG automation, agentic SOC, and the GCCHigh plumbing most consultants can't actually work in. Written for operators, by an operator. No fluff, no vendor pitches.
           </p>
           {submitted ? (
             <div className="newsletter-success">
