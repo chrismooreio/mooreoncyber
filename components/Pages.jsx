@@ -22,9 +22,9 @@ function AboutPage({ navigate }) {
       <section className="section about-section">
         <div className="container-prose">
           <div className="portrait-block">
-            <div className="portrait-placeholder">
-              <span className="portrait-meta">CM · PORTRAIT</span>
-            </div>
+            <figure className="portrait-photo">
+              <img src="assets/chris-moore.jpg" alt="Christopher Moore — Commercial &amp; Federal Cyber Architect" />
+            </figure>
             <div className="portrait-caption">
               <div className="portrait-name">Christopher Moore</div>
               <div className="portrait-title">Commercial &amp; Federal Cyber Architect · Moore Security Group LLC</div>
