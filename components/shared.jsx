@@ -81,7 +81,7 @@ function Footer({ navigate }) {
       </div>
       <div className="footer-bottom">
         <div>© 2026 Moore Security Group LLC</div>
-        <div>Scottsdale, AZ · U.S. Federal &amp; Commercial</div>
+        <div>Houston, TX · U.S. Federal &amp; Commercial</div>
       </div>
     </footer>
   );

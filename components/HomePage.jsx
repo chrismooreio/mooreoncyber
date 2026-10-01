@@ -48,7 +48,7 @@ function HomePage({ navigate }) {
               <figcaption>
                 <span className="hero-portrait-label">// Operator</span>
                 <span className="hero-portrait-name">Christopher Moore</span>
-                <span className="hero-portrait-title">Moore Security Group LLC · Scottsdale, AZ</span>
+                <span className="hero-portrait-title">Moore Security Group LLC · Houston, TX</span>
               </figcaption>
             </figure>
           </div>
@@ -120,39 +120,17 @@ function HomePage({ navigate }) {
           </p>
 
           <div className="writing-list">
-            <a href="#" className="writing-card" onClick={(e) => { e.preventDefault(); navigate('post', 'checking-the-checker'); }}>
-              <div className="writing-meta">
-                <span className="writing-tag">AI Trust</span>
-                <span className="writing-date">Apr 25, 2026</span>
-              </div>
-              <h3 className="writing-title">Checking the Checker: Validating AI Security Work</h3>
-              <p className="writing-excerpt">
-                When an AI agent closes a finding as benign, who verifies the agent was right? The discipline that separates AI-augmented SOCs from teams about to learn the hard way.
-              </p>
-              <div className="writing-read-more">Read the field report →</div>
-            </a>
-            <a href="#" className="writing-card" onClick={(e) => { e.preventDefault(); navigate('post', 'agentic-soc-mcp-data-lake'); }}>
-              <div className="writing-meta">
-                <span className="writing-tag">Agentic</span>
-                <span className="writing-date">Apr 22, 2026</span>
-              </div>
-              <h3 className="writing-title">The Agentic SOC, MCP, and the Security Data Lake Problem</h3>
-              <p className="writing-excerpt">
-                Why the next generation of SOC automation lives in the data lake, not the SIEM — and how MCP servers change who gets to query it.
-              </p>
-              <div className="writing-read-more">Read the field report →</div>
-            </a>
-            <a href="#" className="writing-card writing-card-ghost" onClick={(e) => { e.preventDefault(); navigate('writing'); }}>
-              <div className="writing-meta">
-                <span className="writing-tag">GCCHigh</span>
-                <span className="writing-date">Coming soon</span>
-              </div>
-              <h3 className="writing-title">The GCCHigh Sentinel Deployment Playbook</h3>
-              <p className="writing-excerpt">
-                Connector gaps, ASIM edge cases, the M365 → Sentinel pipeline in sovereign cloud, and every mistake I've watched primes make.
-              </p>
-              <div className="writing-read-more">Subscribe to get it first →</div>
-            </a>
+            {(window.POSTS || []).filter((p) => p.live).slice(0, 3).map((post) => (
+              <a key={post.slug} href="#" className="writing-card" onClick={(e) => { e.preventDefault(); navigate('post', post.slug); }}>
+                <div className="writing-meta">
+                  <span className="writing-tag">{post.tags[0]}</span>
+                  <span className="writing-date">{post.publishDate}</span>
+                </div>
+                <h3 className="writing-title">{post.title}</h3>
+                <p className="writing-excerpt">{post.description}</p>
+                <div className="writing-read-more">Read the field report →</div>
+              </a>
+            ))}
           </div>
 
           <div style={{ marginTop: 48 }}>
